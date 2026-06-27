@@ -1,0 +1,2972 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="theme-color" content="#D4537E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script>
+const manifestData = {
+  name: 'Ornaza Pipeline',
+  short_name: 'Pipeline',
+  start_url: window.location.href,
+  display: 'standalone',
+  background_color: '#FFFFFF',
+  theme_color: '#D4537E',
+  icons: [
+    { src: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj4KICA8cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMGYwZjBmIi8+CiAgPGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iNjgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0U4QTAyMCIgc3Ryb2tlLXdpZHRoPSIxMiIvPgogIDx0ZXh0IHg9Ijk2IiB5PSIxMTAiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXNpemU9IjYwIiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSIjRThBMDIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5PPC90ZXh0Pgo8L3N2Zz4=', sizes: '192x192', type: 'image/svg+xml' }
+  ]
+};
+const manifestBlob = new Blob([JSON.stringify(manifestData)], {type:'application/json'});
+const manifestUrl = URL.createObjectURL(manifestBlob);
+const manifestLink = document.createElement('link');
+manifestLink.rel = 'manifest';
+manifestLink.href = manifestUrl;
+document.head.appendChild(manifestLink);
+</script>
+<title>Ornaza Jewels — Pipeline</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF;--sur:#FFFFFF;--sur2:#FAFAFA;--sur3:#F5F5F5;
+  --brd:#F0DCE4;--brd2:#F4C0D1;
+  --txt:#2A2A2A;--mut:#bbb;--mut2:#999;
+  --gold:#D4537E;--gold2:#E05A8A;
+  --gbg:rgba(212,83,126,0.08);--gbrd:rgba(212,83,126,0.25);
+  --red:#E05252;--rbg:rgba(224,82,82,0.08);--rbrd:rgba(224,82,82,0.3);
+  --grn:#52B788;--grbg:rgba(82,183,136,0.1);--grbrd:rgba(82,183,136,0.3);
+  --amb:#D4884A;--abg:rgba(212,136,74,0.1);--abrd:rgba(212,136,74,0.3);
+  --pur:#7B68C8;--pbg:rgba(123,104,200,0.1);--pbrd:rgba(123,104,200,0.3);
+  --tel:#4A9E8E;--tbg:rgba(74,158,142,0.1);--tbrd:rgba(74,158,142,0.3);
+  --display:'Playfair Display',serif;--mono:'DM Sans',sans-serif;--sans:'DM Sans',sans-serif;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--txt);font-family:var(--sans);display:flex;flex-direction:column;}
+.topbar{background:var(--sur);border-bottom:1px solid var(--brd);padding:0 16px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.logo{font-family:var(--display);font-size:16px;font-weight:900;color:var(--gold);}
+.logo-sub{font-size:9px;color:var(--mut2);letter-spacing:.15em;text-transform:uppercase;}
+.sync-pill{display:flex;align-items:center;gap:5px;background:var(--sur2);border:1px solid var(--brd2);border-radius:99px;padding:4px 10px;font-size:10px;font-family:var(--mono);color:var(--mut2);}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--mut);flex-shrink:0;transition:all .3s;}
+.sync-dot.live{background:var(--grn);box-shadow:0 0 8px rgba(91,168,90,.6);}
+.sync-dot.syncing{background:var(--amb);animation:blink .8s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(68px + var(--safe-b));}
+.page{display:none;padding:16px;}.page.active{display:block;}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--sur);border-top:1px solid var(--brd);display:flex;padding-bottom:var(--safe-b);z-index:100;}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 2px 6px;border:none;background:transparent;color:var(--mut);font-family:var(--sans);font-size:8px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;gap:3px;transition:color .15s;position:relative;}
+.bnav-btn .ni{font-size:16px;line-height:1;}
+.bnav-btn.active{color:var(--gold);}
+.bnav-btn.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--gold);border-radius:0 0 2px 2px;}
+.spill{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--brd2);background:transparent;color:var(--mut2);font-family:var(--sans);white-space:nowrap;}
+.spill.act{background:var(--gbg);color:var(--gold);border-color:var(--gbrd);}
+.spill.act-pl{background:var(--pbg);color:var(--pur);border-color:var(--pbrd);}
+.spill.act-ch{background:var(--tbg);color:var(--tel);border-color:var(--tbrd);}
+.spill.act-re{background:var(--abg);color:var(--amb);border-color:var(--abrd);}
+.spill.act-rd{background:var(--rbg);color:var(--red);border-color:var(--rbrd);}
+.stage-pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;margin-bottom:14px;scrollbar-width:none;}
+.stage-pills::-webkit-scrollbar{display:none;}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.card{background:var(--sur);border:1px solid var(--brd);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.card.cp::before{background:var(--pur);}
+.card.ct::before{background:var(--tel);}
+.card.ca::before{background:var(--amb);}
+.card.cg::before{background:var(--gold);}
+.card-lbl{font-size:9px;color:var(--mut2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.card-val{font-family:'DM Sans',sans-serif;font-size:24px;font-weight:500;line-height:1;font-variant-numeric:tabular-nums;font-feature-settings:'zero' 0;}
+.cp .card-val{color:var(--pur);}.ct .card-val{color:var(--tel);}.ca .card-val{color:var(--amb);}.cg .card-val{color:var(--gold);}
+.card-sub{font-size:10px;color:var(--mut);margin-top:4px;}
+.tbl-wrap{border-radius:10px;border:1px solid var(--brd);overflow:hidden;margin-bottom:14px;}
+table{width:100%;border-collapse:collapse;font-size:11px;}
+thead th{background:var(--sur2);padding:8px 10px;text-align:left;font-size:9px;letter-spacing:.08em;color:var(--mut2);border-bottom:1px solid var(--brd);font-weight:600;text-transform:uppercase;white-space:nowrap;}
+tbody td{padding:9px 10px;border-bottom:1px solid var(--brd);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+.mono{font-family:var(--mono);}.fw6{font-weight:600;}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:99px;font-size:9px;font-weight:600;white-space:nowrap;}
+.bg-red{background:var(--rbg);color:var(--red);border:1px solid var(--rbrd);}
+.bg-grn{background:var(--grbg);color:var(--grn);border:1px solid var(--grbrd);}
+.bg-amb{background:var(--abg);color:var(--amb);border:1px solid var(--abrd);}
+.bg-pur{background:var(--pbg);color:var(--pur);border:1px solid var(--pbrd);}
+.bg-tel{background:var(--tbg);color:var(--tel);border:1px solid var(--tbrd);}
+.bg-gold{background:var(--gbg);color:var(--gold);border:1px solid var(--gbrd);}
+.fcard{background:var(--sur);border:1px solid var(--brd);border-radius:12px;padding:16px;margin-bottom:12px;}
+.ftitle{font-family:var(--display);font-size:14px;font-weight:700;color:var(--gold);margin-bottom:14px;}
+.fgrp{display:flex;flex-direction:column;gap:5px;margin-bottom:11px;}
+.fgrp label{font-size:9px;color:var(--mut2);letter-spacing:.1em;text-transform:uppercase;}
+.fgrp input,.fgrp select,.fgrp textarea{background:var(--sur2);border:1px solid var(--brd2);border-radius:8px;padding:10px 12px;color:var(--txt);font-size:14px;font-family:var(--sans);outline:none;width:100%;-webkit-appearance:none;transition:border-color .15s;}
+.fgrp input:focus,.fgrp select:focus{border-color:var(--gold);}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sku-item{background:var(--sur2);border:1px solid var(--brd);border-radius:10px;padding:12px;margin-bottom:8px;border-left:3px solid var(--gold);}
+.btn{width:100%;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:var(--sans);transition:background .15s;margin-bottom:8px;}
+.btn-gold{background:var(--gold);color:#0a0a08;}
+.btn-gold:disabled{background:var(--sur3);color:var(--mut);cursor:not-allowed;}
+.btn-out{background:transparent;color:var(--txt);border:1px solid var(--brd2);}
+.btn-sm{padding:6px 14px;font-size:11px;border-radius:8px;width:auto;margin-bottom:0;}
+.srch{position:relative;margin-bottom:12px;}
+.srch input{width:100%;background:var(--sur);border:1px solid var(--brd);border-radius:10px;padding:10px 12px 10px 36px;color:var(--txt);font-size:13px;font-family:var(--sans);outline:none;}
+.srch-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--mut);}
+.dcard{background:var(--sur);border:1px solid var(--brd);border-radius:12px;padding:14px;margin-bottom:10px;}
+.drow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--brd);}
+.drow:last-child{border-bottom:none;}
+.toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--sur2);border:1px solid var(--brd2);border-radius:10px;padding:10px 20px;font-size:12px;z-index:999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 16px rgba(212,83,126,.15);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.tok{border-color:var(--grbrd);color:var(--grn);}
+.toast.terr{border-color:var(--rbrd);color:var(--red);}
+.empty{text-align:center;padding:40px 20px;color:var(--mut);font-size:12px;}
+.loading{text-align:center;padding:30px;color:var(--mut);font-size:12px;}
+.sku-wrap{position:relative;}
+.sku-inp{width:100%;background:var(--sur2);border:1px solid var(--brd2);border-radius:8px;padding:10px 12px;color:var(--txt);font-size:14px;font-family:var(--mono);outline:none;}
+.sku-inp:focus{border-color:var(--gold);}
+.sku-drop{position:absolute;top:100%;left:0;right:0;background:var(--sur);border:1px solid var(--gold);border-radius:8px;max-height:180px;overflow-y:auto;z-index:999;display:none;box-shadow:0 4px 16px rgba(212,83,126,.12);}
+.sku-drop.open{display:block;}
+.sku-opt{padding:10px 12px;font-size:13px;font-family:var(--mono);cursor:pointer;border-bottom:1px solid var(--brd);color:var(--txt);}
+.sku-opt:active{background:var(--gbg);color:var(--gold);}
+.acc-item{background:var(--sur);border:1px solid var(--brd);border-radius:12px;overflow:hidden;margin-bottom:8px;}
+.acc-hdr{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer;user-select:none;}
+.acc-hdr:active{background:var(--sur2);}
+.acc-body{padding:0 16px 12px;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.modal-box{background:var(--sur);border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:480px;border-top:1px solid var(--brd2);}
+.modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.modal-title{font-family:var(--display);font-size:15px;font-weight:700;color:var(--gold);}
+.modal-close{background:none;border:none;color:var(--mut);font-size:22px;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div><div class="logo">ORNAZA</div><div class="logo-sub">Pipeline System</div></div>
+  <div class="sync-pill"><span class="sync-dot" id="sdot"></span><span id="slbl">Connecting...</span></div>
+</div>
+<div class="scroll-area">
+
+<!-- DASHBOARD -->
+<div class="page active" id="pg-dash">
+  <div class="cards">
+    <div class="card cp"><div class="card-lbl">In Plating</div><div class="card-val" id="dc-pl">—</div><div class="card-sub" id="dc-pl-s"></div></div>
+    <div class="card ct"><div class="card-lbl">In Chain</div><div class="card-val" id="dc-ch">—</div><div class="card-sub" id="dc-ch-s"></div></div>
+    <div class="card ca"><div class="card-lbl">In Resetting</div><div class="card-val" id="dc-re">—</div><div class="card-sub" id="dc-re-s"></div></div>
+    <div class="card" style="border-top:2px solid #E91E8C"><div class="card-lbl">In Color</div><div class="card-val" id="dc-col" style="color:#E91E8C">—</div><div class="card-sub"></div></div>
+    <div class="card" style="border-top:2px solid #9C27B0"><div class="card-lbl">Raw Pendant</div><div class="card-val" id="dc-pend" style="color:#9C27B0">—</div><div class="card-sub"></div></div>
+    <div class="card" style="border-top:2px solid var(--gold)"><div class="card-lbl">Ashraful Pending</div><div class="card-val" id="dc-ashraful" style="color:var(--gold)">—</div><div class="card-sub">Factory Orders</div></div>
+    <div class="card" style="border-top:2px solid var(--amb)"><div class="card-lbl">Shiv Pending</div><div class="card-val" id="dc-shiv" style="color:var(--amb)">—</div><div class="card-sub">Factory Orders</div></div>
+    <div class="card cg"><div class="card-lbl">Total Entries</div><div class="card-val" id="dc-en">—</div><div class="card-sub">Firebase</div></div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <div style="font-family:var(--display);font-size:15px;font-weight:700">SKU Status</div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <select id="dash-sort" onchange="renderDash()" style="background:var(--sur2);border:1px solid var(--brd2);color:var(--txt);border-radius:6px;padding:4px 8px;font-size:11px;font-family:var(--sans);outline:none">
+        <option value="default">Default</option>
+        <option value="high_sell_low_stock">🔥 High Selling, Low Stock</option>
+        <option value="sales7">Top Sales (7d)</option>
+        <option value="days_asc">Days Left ↑</option>
+        <option value="days_desc">Days Left ↓</option>
+        <option value="stock_desc">Stock ↓</option>
+      </select>
+      <button class="btn btn-out btn-sm" onclick="syncShopifyStock()" style="background:var(--grbg);border-color:var(--grbrd);color:var(--grn)">🔄 Stock</button>
+      <button class="btn btn-out btn-sm" onclick="goPage('entry')">+ Entry</button>
+    </div>
+  </div>
+  <div id="stock-sync-badge" style="font-size:10px;color:var(--mut2);margin-bottom:8px;cursor:pointer" onclick="syncShopifyStock()">📦 Stock not synced — click 🔄 to sync</div>
+  <div class="srch"><span class="srch-ico">🔍</span><input type="text" id="dsrch" placeholder="HMS-102 search karo..." oninput="renderDash()"></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>SKU</th><th>Cat</th><th>Stock</th><th>Days Left</th><th>Sales 7d</th><th>Pendant</th><th>Chain</th><th style="color:var(--red)">Ashraful</th><th style="color:var(--red)">Shiv</th><th>Resetting</th><th>Plating</th><th>Color</th><th>Status</th></tr></thead>
+    <tbody id="dash-tbl"><tr><td colspan="6"><div class="loading">Loading...</div></td></tr></tbody>
+  </table></div>
+</div>
+
+<!-- ENTRY -->
+<div class="page" id="pg-entry">
+  <div class="fcard">
+    <div class="ftitle">Challan Details</div>
+    <div class="fgrp"><label>Stage</label>
+      <select id="e-stage" onchange="onStage()">
+        <option value="Plating-Sent">Plating — Bheja</option>
+        <option value="Chain-Sent-Plating">Chain — Bheja (Plating se)</option>
+        <option value="Chain-Sent-Factory">Chain — Bheja (Factory se)</option>
+        <option value="Chain-Sent-Resetting">Chain — Bheja (Resetting se)</option>
+        <option value="Chain-Received">Chain — Mila</option>
+        <option value="Resetting-Sent">Resetting — Bheja (Plating se)</option>
+        <option value="Resetting-Sent-Factory">Resetting — Bheja (Factory se)</option>
+        <option value="Resetting-Sent-Again">Resetting — Dobara Bheja</option>
+        <option value="Resetting-Received">Resetting — Mila</option>
+        <option value="Resetting-Mila-RawPendant">Resetting Mila — Raw Pendant</option>
+        <option value="Pendant-In">Raw Pendant — Stock Mein Add</option>
+        <option value="Chain-Sent-Pendant">Chain — Bheja (Raw Pendant se)</option>
+        <option value="Color-Sent-Plating">Color — Bheja (Plating se)</option>
+        <option value="Color-Sent-Factory">Color — Bheja (Factory se)</option>
+        <option value="Color-Received">Color — Mila</option>
+        <option value="Chain-Sent-Color">Chain — Bheja (Color se)</option>
+        <option value="Resetting-Sent-Color">Resetting — Bheja (Color se)</option>
+        <option value="Resetting-Sent-Pendant">Resetting — Bheja (Raw Pendant se)</option>
+        <option value="Plating-Lost">Plating — Lost/Damage</option>
+        <option value="Chain-Lost">Chain — Lost/Damage</option>
+        <option value="Resetting-Lost">Resetting — Lost/Damage</option>
+      </select>
+    </div>
+    <div class="frow">
+      <div class="fgrp"><label id="vlbl">Plating/Chain Vendor</label><input type="text" id="e-vendor" value="Regular"></div>
+      <div class="fgrp"><label>Challan No (Auto)</label><input type="text" id="e-challan" readonly style="color:var(--gold);font-weight:600;background:var(--sur3)"></div>
+    </div>
+    <div class="frow">
+      <div class="fgrp"><label>Factory Vendor</label><input type="text" id="e-pendant" placeholder="Factory 1"></div>
+      <div class="fgrp"><label>Sent By</label><input type="text" id="e-sentby" placeholder="Naam"></div>
+    </div>
+    <div class="fgrp"><label>Date</label><input type="date" id="e-date" onchange="updateChallan()"></div>
+  </div>
+  <div class="fcard">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="ftitle" style="margin:0">SKU Details</div>
+      <button class="btn btn-out btn-sm" onclick="addSkuRow()">+ SKU</button>
+    </div>
+    <div id="sku-rows"></div>
+    <button class="btn btn-out btn-sm" style="width:100%;margin-top:4px" onclick="addSkuRow()">+ Aur SKU</button>
+  </div>
+  <button class="btn btn-gold" id="savebtn" onclick="saveEntry()">✓ Save Karo</button>
+  <button class="btn btn-out" onclick="clearForm()">Clear</button>
+</div>
+
+<!-- PIPELINE -->
+<div class="page" id="pg-pipe">
+  <div class="stage-pills">
+    <button class="spill act" onclick="setPF('all',this)">Sabhi</button>
+    <button class="spill" onclick="setPF('Plating',this)">Plating</button>
+    <button class="spill" onclick="setPF('Chain',this)">Chain</button>
+    <button class="spill" onclick="setPF('Resetting',this)">Resetting</button>
+    <button class="spill" onclick="setPF('pending',this)">Pending Only</button>
+  </div>
+  <div id="pipe-sum"></div>
+  <div class="srch"><span class="srch-ico">🔍</span><input type="text" id="psrch" placeholder="SKU search..." oninput="renderPipe()"></div>
+  <div id="pipe-list"><div class="loading">Loading...</div></div>
+</div>
+
+<!-- HISTORY -->
+<div class="page" id="pg-hist">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+    <button id="htgl-diya" onclick="setHT('diya')" style="padding:10px;border-radius:10px;border:2px solid var(--gold);background:var(--gold);color:#0a0a08;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer">↑ DIYA (Bheja)</button>
+    <button id="htgl-aaya" onclick="setHT('aaya')" style="padding:10px;border-radius:10px;border:2px solid var(--brd2);background:transparent;color:var(--mut2);font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer">↓ AAYA (Mila)</button>
+  </div>
+  <div class="stage-pills">
+    <button class="spill act" onclick="setHF('plating',this)">Plating</button>
+    <button class="spill" onclick="setHF('color',this)">Color</button>
+    <button class="spill" onclick="setHF('pendant',this)">Pendant</button>
+    <button class="spill" onclick="setHF('chain',this)">Chain</button>
+    <button class="spill" onclick="setHF('resetting',this)">Resetting</button>
+    <button class="spill" onclick="setHF('lost',this)">Lost/Damage</button>
+  </div>
+  <div class="srch"><span class="srch-ico">🔍</span><input type="text" id="hsrch" placeholder="SKU search karo..." oninput="renderHist()"></div>
+  <div id="hist-list"><div class="loading">Loading...</div></div>
+</div>
+
+<!-- REPORT -->
+<div class="page" id="pg-rep">
+  <div style="font-family:var(--display);font-size:16px;font-weight:700;margin-bottom:8px">Report</div>
+  <div style="font-size:11px;color:var(--mut2);margin-bottom:16px">Weekly Report aur Factory Bill Tally ab <b style="color:var(--gold)">Others tab</b> mein hain (5 aur 6)</div>
+  <div style="text-align:center;padding:20px;color:var(--mut2)">
+    <div style="font-size:28px;margin-bottom:8px">📊</div>
+    <div style="font-size:13px;font-weight:600;color:var(--txt);margin-bottom:4px">Factory Bill AI Match</div>
+    <div style="font-size:11px;color:var(--mut2)">Ab yeh <b style="color:var(--gold)">Others tab</b> mein hai — Serial 6</div>
+  </div>
+</div>
+
+<!-- OTHERS -->
+<div class="page" id="pg-oth">
+  <div style="font-family:var(--display);font-size:16px;font-weight:700;color:var(--gold);margin-bottom:16px">Others</div>
+
+  <!-- 1. Chain Bill Tally -->
+  <div class="acc-item">
+    <div class="acc-hdr" onclick="toggleAcc(1)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="background:var(--gbg);border:1px solid var(--gbrd);border-radius:6px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold)">1</div>
+        <div><div style="font-size:13px;font-weight:600">Chain Bill Tally</div><div style="font-size:10px;color:var(--mut2)">Bill photo upload karo — AI se tally karao</div></div>
+      </div>
+      <div id="acc-arrow-1" style="color:var(--mut);font-size:14px;transition:transform .2s">▼</div>
+    </div>
+    <div class="acc-body" id="acc-body-1" style="display:none">
+      <div class="fcard">
+        <div class="ftitle">📸 Step 1 — Bill Photo Upload Karo</div>
+        <div id="cb-upload-area" onclick="document.getElementById('cb-bill-img').click()" style="border:2px dashed var(--gold);border-radius:10px;padding:20px;text-align:center;cursor:pointer;background:var(--gbg);margin-bottom:10px">
+          <div style="font-size:28px">📷</div>
+          <div style="font-size:12px;color:var(--mut2);margin-top:6px">Bill ka photo tap karke upload karo</div>
+          <div style="font-size:10px;color:var(--mut);margin-top:3px">AI automatically sab extract kar lega</div>
+        </div>
+        <input type="file" id="cb-bill-img" accept="image/*" style="display:none" onchange="cbExtractBill(this)">
+        <img id="cb-img-preview" style="display:none;width:100%;border-radius:8px;margin-bottom:10px;max-height:200px;object-fit:contain;background:var(--sur2)" alt="Bill Preview">
+        <div id="cb-extract-status" style="display:none;text-align:center;padding:10px;font-size:12px;color:var(--gold)">🤖 AI bill padh raha hai...</div>
+      </div>
+      <div class="fcard">
+        <div class="ftitle">📋 Step 2 — Bill Details</div>
+        <div class="frow">
+          <div class="fgrp" style="margin:0"><label>Chain Vendor</label><input type="text" id="cb-vendor" placeholder="Khodiyar Sales"></div>
+          <div class="fgrp" style="margin:0"><label>Bill Date</label><input type="date" id="cb-date"></div>
+        </div>
+        <div class="frow" style="margin-top:10px">
+          <div class="fgrp" style="margin:0"><label>Bill No</label><input type="text" id="cb-bill-no" placeholder="78"></div>
+          <div class="fgrp" style="margin:0"><label>GST %</label>
+            <select id="cb-gst">
+              <option value="3">3% (SGST 1.5% + CGST 1.5%)</option>
+              <option value="0">0% (No GST)</option>
+              <option value="5">5%</option>
+            </select>
+          </div>
+        </div>
+        <div class="frow" style="margin-top:10px">
+          <div class="fgrp" style="margin:0"><label>Bill Total Pieces</label><input type="number" id="cb-total-pcs" placeholder="1369" inputmode="numeric"></div>
+          <div class="fgrp" style="margin:0"><label>Bill Grand Total (₹)</label><input type="number" id="cb-bill-amt" placeholder="37537" inputmode="numeric"></div>
+        </div>
+      </div>
+      <div class="fcard">
+        <div class="ftitle">🧾 Step 3 — Vendor Bill Items</div>
+        <div style="font-size:10px;color:var(--mut2);margin-bottom:8px">AI se auto-fill hoga. SKU column mein rate+qty se automatically match hoga.</div>
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:11px;min-width:400px" id="cb-vendor-tbl">
+            <thead><tr style="background:var(--sur3)">
+              <th style="padding:6px 8px;text-align:left;color:var(--mut2);font-weight:600;font-size:9px">#</th>
+              <th style="padding:6px 8px;text-align:left;color:var(--mut2);font-weight:600;font-size:9px">DESCRIPTION</th>
+              <th style="padding:6px 8px;text-align:center;color:var(--gold);font-weight:600;font-size:9px">SKU</th>
+              <th style="padding:6px 8px;text-align:center;color:var(--mut2);font-weight:600;font-size:9px">QTY</th>
+              <th style="padding:6px 8px;text-align:center;color:var(--mut2);font-weight:600;font-size:9px">RATE</th>
+              <th style="padding:6px 8px;text-align:right;color:var(--mut2);font-weight:600;font-size:9px">AMT</th>
+              <th style="padding:6px 4px;width:20px"></th>
+            </tr></thead>
+            <tbody id="cb-vendor-rows"></tbody>
+          </table>
+        </div>
+        <button onclick="cbAddVendorRow()" style="margin-top:8px;width:100%;padding:7px;background:var(--sur2);border:1px dashed var(--brd2);border-radius:7px;color:var(--mut2);font-size:11px;cursor:pointer">+ Row Add Karo</button>
+      </div>
+      <div class="fcard">
+        <div class="ftitle">✍️ Step 4 — Apni Received Qty Paste Karo</div>
+        <div style="font-size:10px;color:var(--mut2);margin-bottom:8px">Koi bhi format chalega: <span class="mono" style="color:var(--gold)">HMS-125 76</span> · <span class="mono" style="color:var(--gold)">hms102 98</span> · <span class="mono" style="color:var(--gold)">125 80</span></div>
+        <textarea id="cb-paste" rows="6" placeholder="HMS-125 76&#10;HMS-102 98&#10;HMS-103 222&#10;hms 107 100" style="width:100%;background:var(--sur2);border:1px solid var(--brd2);border-radius:8px;padding:10px;color:var(--txt);font-size:13px;font-family:var(--mono);outline:none;resize:vertical"></textarea>
+      </div>
+      <button class="btn btn-gold" style="width:100%;padding:14px;font-size:15px;pointer-events:all;opacity:1" onclick="calcChainBill()" id="cb-tally-btn">⚖️ Tally Karo</button>
+      <div id="cb-result"></div>
+    </div>
+  </div>
+
+  <!-- 2. Chain SKU Prices -->
+  <div class="acc-item">
+    <div class="acc-hdr" onclick="toggleAcc(2)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="background:var(--gbg);border:1px solid var(--gbrd);border-radius:6px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold)">2</div>
+        <div><div style="font-size:13px;font-weight:600">Chain SKU Prices</div><div style="font-size:10px;color:var(--mut2)">Vendor wise prices — password protected</div></div>
+      </div>
+      <div id="acc-arrow-2" style="color:var(--mut);font-size:14px;transition:transform .2s">▼</div>
+    </div>
+    <div class="acc-body" id="acc-body-2" style="display:none">
+      <div id="price-lock" class="fcard">
+        <div style="text-align:center;padding:10px 0">
+          <div style="font-size:32px;margin-bottom:10px">🔒</div>
+          <div style="font-size:13px;color:var(--mut2);margin-bottom:14px">Password daalo prices dekhne ke liye</div>
+          <input type="password" id="price-pwd-inp" placeholder="Password..." style="background:var(--sur2);border:1px solid var(--brd2);border-radius:8px;padding:10px 14px;color:var(--txt);font-size:14px;font-family:var(--sans);outline:none;width:100%;text-align:center;margin-bottom:10px" onkeydown="if(event.key==='Enter')unlockPrices()">
+          <button class="btn btn-gold" onclick="unlockPrices()" style="margin:0">Unlock</button>
+        </div>
+      </div>
+      <div id="price-section" style="display:none">
+        <div class="fcard">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div class="ftitle" style="margin:0">Chain Prices</div>
+            <button onclick="lockPrices()" style="background:var(--rbg);border:1px solid var(--rbrd);color:var(--red);border-radius:6px;padding:4px 10px;font-size:10px;font-family:var(--sans);cursor:pointer">🔒 Lock</button>
+          </div>
+          <div style="margin-bottom:12px">
+            <div style="font-size:10px;color:var(--mut2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:600">Step 1 — Vendor Chunno</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px" id="vendor-tabs"></div>
+            <button onclick="showAddVendor()" style="padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px dashed var(--brd2);background:transparent;color:var(--mut2)">+ Add Vendor</button>
+            <div id="add-vendor-box" style="display:none;margin-top:8px">
+              <div style="display:flex;gap:8px;align-items:center">
+                <input type="text" id="new-vendor-name" placeholder="Vendor naam..." style="flex:1;background:var(--sur2);border:1px solid var(--brd2);border-radius:8px;padding:8px 12px;color:var(--txt);font-size:13px;font-family:var(--sans);outline:none">
+                <button onclick="addVendor()" style="background:var(--gold);color:#0a0a08;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer">Add</button>
+                <button onclick="document.getElementById('add-vendor-box').style.display='none'" style="background:transparent;border:none;color:var(--mut);font-size:18px;cursor:pointer">✕</button>
+              </div>
+            </div>
+          </div>
+          <div id="vendor-price-section" style="display:none">
+            <div style="font-size:10px;color:var(--mut2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:600">Step 2 — <span id="sel-vendor-lbl">Vendor</span> ke Prices</div>
+            <div id="chain-price-list" style="margin-bottom:12px"></div>
+            <div id="cp-edit-box" style="display:none;background:var(--sur2);border-radius:8px;padding:10px;margin-bottom:10px;border:1px solid var(--gold)">
+              <div style="font-size:10px;color:var(--gold);font-weight:600;margin-bottom:8px">Price Edit Karo</div>
+              <div class="frow">
+                <div class="fgrp" style="margin:0"><label>SKU</label><input type="text" id="cp-edit-sku" readonly style="color:var(--mut2)"></div>
+                <div class="fgrp" style="margin:0"><label>Naya Price (₹)</label><input type="number" id="cp-edit-price" inputmode="decimal"></div>
+              </div>
+              <input type="hidden" id="cp-edit-id">
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <button class="btn btn-gold btn-sm" style="flex:1;margin:0" onclick="saveEditPrice()">✓ Update</button>
+                <button class="btn btn-out btn-sm" style="margin:0" onclick="document.getElementById('cp-edit-box').style.display='none'">Cancel</button>
+              </div>
+            </div>
+            <div style="background:var(--sur2);border-radius:8px;padding:10px;border:1px solid var(--brd)">
+              <div style="font-size:10px;color:var(--mut2);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">+ Naya Price Add Karo</div>
+              <div class="frow">
+                <div class="fgrp" style="margin:0"><label>SKU</label>
+                  <div class="sku-wrap">
+                    <input type="text" id="cp-sku-inp" class="finp" placeholder="107 likho..." autocomplete="off" style="font-family:var(--mono)" oninput="cpSkuSearch(this.value)" onkeydown="cpSkuEnter(event)">
+                    <div id="cp-sku-drop" class="sku-drop"></div>
+                  </div>
+                  <input type="hidden" id="cp-sku-sel">
+                </div>
+                <div class="fgrp" style="margin:0"><label>Price (₹)</label><input type="number" id="cp-price" placeholder="28" inputmode="decimal" onkeydown="if(event.key==='Enter'){event.preventDefault();addChainPrice();setTimeout(()=>{document.getElementById('cp-sku-inp').value='';document.getElementById('cp-sku-sel').value='';document.getElementById('cp-price').value='';document.getElementById('cp-sku-inp').focus();},100);}"></div>
+              </div>
+              <input type="hidden" id="cp-vendor">
+              <button class="btn btn-gold btn-sm" style="width:100%;margin-top:8px" onclick="addChainPrice()">+ Price Add Karo</button>
+            </div>
+          </div>
+        </div>
+        <div class="fcard">
+          <div class="ftitle">Password Change Karo</div>
+          <div class="fgrp"><label>Naya Password</label><input type="password" id="new-pwd" placeholder="Naya password..."></div>
+          <div class="fgrp"><label>Confirm Password</label><input type="password" id="confirm-pwd" placeholder="Dobara likho..."></div>
+          <button class="btn btn-out" onclick="changePwd()">Password Update Karo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Factory SKU Mapping -->
+  <div class="acc-item">
+    <div class="acc-hdr" onclick="toggleAcc(3)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="background:var(--gbg);border:1px solid var(--gbrd);border-radius:6px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold)">3</div>
+        <div><div style="font-size:13px;font-weight:600">Factory SKU Mapping</div><div style="font-size:10px;color:var(--mut2)">Factory ka SKU → Tumhara SKU</div></div>
+      </div>
+      <div id="acc-arrow-3" style="color:var(--mut);font-size:14px;transition:transform .2s">▼</div>
+    </div>
+    <div class="acc-body" id="acc-body-3" style="display:none">
+      <div class="fcard">
+        <div id="sku-map-list" style="margin-bottom:12px"></div>
+        <div class="frow">
+          <div class="fgrp" style="margin:0"><label>Factory SKU</label><input type="text" id="map-fsku" placeholder="HMS-220" style="text-transform:uppercase"></div>
+          <div class="fgrp" style="margin:0"><label>Tumhara SKU</label><input type="text" id="map-ysku" placeholder="HMS-219" style="text-transform:uppercase"></div>
+        </div>
+        <button class="btn btn-gold btn-sm" style="width:100%;margin-top:8px" onclick="addSkuMapping()">+ Mapping Add Karo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Custom SKU -->
+  <div class="acc-item">
+    <div class="acc-hdr" onclick="toggleAcc(4)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="background:var(--gbg);border:1px solid var(--gbrd);border-radius:6px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold)">4</div>
+        <div><div style="font-size:13px;font-weight:600">Custom SKU</div><div style="font-size:10px;color:var(--mut2)">Naya SKU add ya delete karo</div></div>
+      </div>
+      <div id="acc-arrow-4" style="color:var(--mut);font-size:14px;transition:transform .2s">▼</div>
+    </div>
+    <div class="acc-body" id="acc-body-4" style="display:none">
+      <div class="fcard">
+        <div id="custom-sku-list" style="margin-bottom:12px"></div>
+        <div class="fgrp"><label>SKU Code</label><input type="text" id="new-sku-code" placeholder="HMS-220" style="text-transform:uppercase"></div>
+        <div class="fgrp"><label>Category</label>
+          <select id="new-sku-cat">
+            <option value="BESTSELLING">★ BESTSELLING</option>
+            <option value="GOOD">◆ GOOD</option>
+            <option value="NORMAL" selected>● NORMAL</option>
+          </select>
+        </div>
+        <button class="btn btn-gold" id="add-sku-btn" onclick="addCustomSku()">+ SKU Add Karo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Weekly Report -->
+  <div class="acc-item">
+    <div class="acc-hdr" onclick="toggleAcc(5)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="background:var(--gbg);border:1px solid var(--gbrd);border-radius:6px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold)">5</div>
+        <div><div style="font-size:13px;font-weight:600">Weekly Report</div><div style="font-size:10px;color:var(--mut2)">Hafte ki Plating/Chain/Resetting summary</div></div>
+      </div>
+      <div id="acc-arrow-5" style="color:var(--mut);font-size:14px;transition:transform .2s">▼</div>
+    </div>
+    <div class="acc-body" id="acc-body-5" style="display:none">
+      <div class="fcard">
+        <div class="frow">
+          <div class="fgrp" style="margin:0"><label>From</label><input type="date" id="rep-from" onchange="renderReport()"></div>
+          <div class="fgrp" style="margin:0"><label>To</label><input type="date" id="rep-to" onchange="renderReport()"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <button onclick="setWeek(0)" style="padding:5px 12px;border-radius:8px;border:1px solid var(--gold);background:var(--gbg);color:var(--gold);font-size:11px;font-family:var(--sans);cursor:pointer;font-weight:600">Is Hafte</button>
+          <button onclick="setWeek(-1)" style="padding:5px 12px;border-radius:8px;border:1px solid var(--brd2);background:transparent;color:var(--mut2);font-size:11px;font-family:var(--sans);cursor:pointer">Pichhla</button>
+          <button onclick="setWeek(-2)" style="padding:5px 12px;border-radius:8px;border:1px solid var(--brd2);background:transparent;color:var(--mut2);font-size:11px;font-family:var(--sans);cursor:pointer">2 Pehle</button>
+        </div>
+      </div>
+      <div id="rep-out"><div class="empty">Date chunno</div></div>
+    </div>
+  </div>
+
+  <!-- 6. Factory Bill AI Match -->
+  <div class="acc-item">
+    <div class="acc-hdr" onclick="toggleAcc(6)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="background:var(--gbg);border:1px solid var(--gbrd);border-radius:6px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold)">6</div>
+        <div><div style="font-size:13px;font-weight:600">Pendant Factory Tally</div><div style="font-size:10px;color:var(--mut2)">Bill upload karo — AI se tally karao</div></div>
+      </div>
+      <div id="acc-arrow-6" style="color:var(--mut);font-size:14px;transition:transform .2s">▼</div>
+    </div>
+    <div class="acc-body" id="acc-body-6" style="display:none">
+      <div class="fcard">
+        <div class="fgrp"><label>Claude API Key (ek baar daalo)</label>
+          <input type="password" id="api-key-input" placeholder="sk-ant-..." style="font-family:var(--mono)" oninput="localStorage.setItem('ornaza_api_key',this.value)">
+        </div>
+        <div style="font-size:9px;color:var(--mut2);margin-top:-6px">console.anthropic.com → API Keys → Create Key</div>
+      </div>
+      <div class="fcard">
+        <div class="frow">
+          <div class="fgrp" style="margin:0"><label>App Entry Date</label><input type="date" id="bill-date"></div>
+          <div class="fgrp" style="margin:0"><label>Factory Vendor (optional)</label><input type="text" id="bill-vendor" placeholder="Haasina"></div>
+        </div>
+        <div id="bill-drop-area" onclick="document.getElementById('bill-upload').click()" style="border:2px dashed var(--brd2);border-radius:10px;padding:20px;text-align:center;cursor:pointer;margin-top:10px">
+          <div style="font-size:24px;margin-bottom:6px">📄</div>
+          <div style="font-size:13px;font-weight:600">Bill Upload Karo</div>
+          <div style="font-size:11px;color:var(--mut2);margin-top:4px">PDF ya Image (JPG/PNG)</div>
+          <div id="bill-fname" style="font-size:11px;color:var(--gold);margin-top:6px"></div>
+          <input type="file" id="bill-upload" accept="image/*,.pdf" style="display:none" onchange="onBillFile(event)">
+        </div>
+        <button id="analyze-btn" onclick="analyzeBill()" style="display:none;width:100%;padding:11px;background:var(--pur);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;margin-top:12px">🤖 AI se Bill Read Karwao</button>
+      </div>
+      <div id="bill-result"></div>
+    </div>
+  </div>
+
+  <!-- 7. Pendant Mapping -->
+  <div class="acc-item">
+    <div class="acc-hdr" onclick="toggleAcc(7)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="background:var(--gbg);border:1px solid var(--gbrd);border-radius:6px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold)">7</div>
+        <div><div style="font-size:13px;font-weight:600">Pendant Mapping</div><div style="font-size:10px;color:var(--mut2)">Konsa SKU kis pendant se banta hai</div></div>
+      </div>
+      <div id="acc-arrow-7" style="color:var(--mut);font-size:14px;transition:transform .2s">▼</div>
+    </div>
+    <div class="acc-body" id="acc-body-7" style="display:none">
+      <div class="fcard">
+        <div class="srch" style="margin-bottom:12px"><span class="srch-ico">🔍</span><input type="text" id="pm-search" placeholder="HMS-103 search karo..." oninput="renderPendantMappingList()"></div>
+        <div style="font-size:12px;color:var(--mut2);margin-bottom:10px">Pendant SKU select karo → usse banane wale SKUs add karo</div>
+        <div class="frow">
+          <div class="fgrp" style="margin:0">
+            <label>Pendant SKU</label>
+            <div class="sku-wrap">
+              <input type="text" id="pm-pendant-inp" class="finp" placeholder="107 likho..." autocomplete="off" style="font-family:var(--mono)" oninput="pmSkuSearch('pendant',this.value)" onkeydown="pmSkuEnter(event,'pendant')">
+              <div id="pm-pendant-drop" class="sku-drop"></div>
+            </div>
+            <input type="hidden" id="pm-pendant-sku">
+          </div>
+          <div class="fgrp" style="margin:0">
+            <label>Product SKU (jo isse banta hai)</label>
+            <div class="sku-wrap">
+              <input type="text" id="pm-product-inp" class="finp" placeholder="125 likho..." autocomplete="off" style="font-family:var(--mono)" oninput="pmSkuSearch('product',this.value)" onkeydown="pmSkuEnter(event,'product')">
+              <div id="pm-product-drop" class="sku-drop"></div>
+            </div>
+            <input type="hidden" id="pm-product-sku">
+          </div>
+        </div>
+        <button class="btn btn-gold" onclick="addPendantMapping()" style="margin-top:8px">+ Mapping Add Karo</button>
+      </div>
+      <div id="pm-list"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SETTINGS -->
+<div class="page" id="pg-set">
+  <div class="fcard">
+    <div class="ftitle">Settings</div>
+    <div style="text-align:center;padding:20px;color:var(--mut2)">
+      <div style="font-size:28px;margin-bottom:8px">🔗</div>
+      <div style="font-size:13px;font-weight:600;color:var(--txt);margin-bottom:4px">SKU Mapping aur Custom SKU</div>
+      <div style="font-size:11px;color:var(--mut2)">Ab yeh <b style="color:var(--gold)">Others tab</b> mein hain — Serial 3 aur 4</div>
+    </div>
+  </div>
+  <div class="fcard">
+    <div class="ftitle">🤖 Claude API Key</div>
+    <div class="fgrp"><label>API Key (bill photo AI ke liye)</label>
+      <input type="password" id="settings-api-key" placeholder="sk-ant-..." style="font-family:var(--mono)">
+    </div>
+    <button onclick="window.saveApiKey()" style="width:100%;padding:10px;background:var(--gold);border:none;border-radius:8px;color:#0a0a08;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px">💾 Save API Key</button>
+    <div style="font-size:9px;color:var(--mut2);margin-top:6px">console.anthropic.com → API Keys → Create Key</div>
+  </div>
+  <div class="fcard">
+    <div class="ftitle">Shopify Stock Sync</div>
+    <div style="font-size:11px;color:var(--mut2);margin-bottom:12px">Shopify se live stock fetch karo — ek click mein!</div>
+    <button class="btn btn-gold" onclick="syncShopifyStock()">🔄 Sync Stock Now</button>
+    <div id="shopify-sync-status" style="font-size:11px;color:var(--mut2);margin-top:8px"></div>
+  </div>
+  <div class="fcard">
+    <div class="ftitle">⚖️ SKU Chain Ratio</div>
+    <div style="font-size:11px;color:var(--mut2);margin-bottom:12px">Kuch pendants ek chain mein 2 lagte hain — unka ratio yahan set karo. PDF mein automatically (50 = chain) dikhega.</div>
+    <div id="sku-ratio-list" style="margin-bottom:12px"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end">
+      <div class="fgrp" style="margin:0"><label>SKU Code</label><input type="text" id="ratio-sku-inp" placeholder="HMS-163" style="font-family:var(--mono)"></div>
+      <div class="fgrp" style="margin:0"><label>Ratio (pendants per chain)</label><input type="number" id="ratio-val-inp" placeholder="2" min="1" max="10"></div>
+      <button onclick="addSkuRatio()" style="padding:10px 14px;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;height:38px">+ Add</button>
+    </div>
+  </div>
+  <div class="fcard">
+    <div class="ftitle">App Info</div>
+    <div class="drow"><span style="font-size:12px;color:var(--mut2)">Version</span><span class="mono" style="font-size:12px">v2.0</span></div>
+    <div class="drow"><span style="font-size:12px;color:var(--mut2)">Firebase</span><span class="mono" style="font-size:12px;color:var(--grn)" id="fb-status">Connecting...</span></div>
+  </div>
+</div>
+
+</div><!-- scroll-area end -->
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <button class="bnav-btn active" id="bn-dash" onclick="goPage('dash')"><span class="ni">📊</span>Dashboard</button>
+  <button class="bnav-btn" id="bn-entry" onclick="goPage('entry')"><span class="ni">➕</span>Entry</button>
+  <button class="bnav-btn" id="bn-pipe" onclick="goPage('pipe')"><span class="ni">🔄</span>Pipeline</button>
+  <button class="bnav-btn" id="bn-hist" onclick="goPage('hist')"><span class="ni">📋</span>History</button>
+  <button class="bnav-btn" id="bn-rep" onclick="goPage('rep')"><span class="ni">📊</span>Report</button>
+  <button class="bnav-btn" id="bn-oth" onclick="goPage('oth')"><span class="ni">🔗</span>Others</button>
+  <button class="bnav-btn" id="bn-set" onclick="goPage('set')"><span class="ni">⚙️</span>Settings</button>
+</nav>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- EDIT SINGLE ENTRY MODAL -->
+<div class="modal-bg" id="edit-modal">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <div class="modal-title">Entry Edit Karo</div>
+      <button class="modal-close" onclick="closeEditModal()">✕</button>
+    </div>
+    <input type="hidden" id="em-id">
+    <div class="frow">
+      <div class="fgrp"><label>SKU</label><select id="em-sku"></select></div>
+      <div class="fgrp"><label>Stage</label>
+        <select id="em-stage">
+          <option value="Plating-Sent">Plating — Bheja</option>
+          <option value="Chain-Sent-Plating">Chain — Bheja (Plating se)</option>
+          <option value="Chain-Sent-Factory">Chain — Bheja (Factory se)</option>
+          <option value="Chain-Sent-Resetting">Chain — Bheja (Resetting se)</option>
+          <option value="Chain-Received">Chain — Mila</option>
+          <option value="Resetting-Sent">Resetting — Bheja (Plating se)</option>
+          <option value="Resetting-Sent-Factory">Resetting — Bheja (Factory se)</option>
+          <option value="Resetting-Sent-Again">Resetting — Dobara Bheja</option>
+          <option value="Resetting-Received">Resetting — Mila</option>
+        <option value="Resetting-Mila-RawPendant">Resetting Mila — Raw Pendant</option>
+          <option value="Pendant-In">Raw Pendant — Stock Mein Add</option>
+        <option value="Chain-Sent-Pendant">Chain — Bheja (Raw Pendant se)</option>
+        <option value="Color-Sent-Plating">Color — Bheja (Plating se)</option>
+          <option value="Color-Sent-Factory">Color — Bheja (Factory se)</option>
+          <option value="Color-Received">Color — Mila</option>
+          <option value="Chain-Sent-Color">Chain — Bheja (Color se)</option>
+          <option value="Resetting-Sent-Color">Resetting — Bheja (Color se)</option>
+          <option value="Resetting-Sent-Pendant">Resetting — Bheja (Raw Pendant se)</option>
+        <option value="Resetting-Sent-Pendant">Resetting — Bheja (Raw Pendant se)</option>
+          <option value="Plating-Lost">Plating — Lost</option>
+          <option value="Chain-Lost">Chain — Lost</option>
+          <option value="Resetting-Lost">Resetting — Lost</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fgrp"><label>Qty</label><input type="number" id="em-qty" inputmode="numeric"></div>
+      <div class="fgrp"><label>Weight (g)</label><input type="number" id="em-wt" inputmode="decimal"></div>
+    </div>
+    <div class="frow">
+      <div class="fgrp"><label>Date</label><input type="date" id="em-date"></div>
+      <div class="fgrp"><label>Challan</label><input type="text" id="em-challan"></div>
+    </div>
+    <div class="frow">
+      <div class="fgrp"><label>Vendor</label><input type="text" id="em-vendor"></div>
+      <div class="fgrp"><label>Sent By</label><input type="text" id="em-sentby"></div>
+    </div>
+    <button class="btn btn-gold" id="em-savebtn" onclick="saveEdit()">✓ Update Karo</button>
+  </div>
+</div>
+
+<!-- EDIT CHALLAN MODAL -->
+<div class="modal-bg" id="ec-modal">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <div class="modal-title">Challan Edit Karo</div>
+      <button class="modal-close" onclick="document.getElementById('ec-modal').style.display='none'">✕</button>
+    </div>
+    <div class="frow">
+      <div class="fgrp"><label>Date</label><input type="date" id="ec-date"></div>
+      <div class="fgrp"><label>Vendor</label><input type="text" id="ec-vendor"></div>
+    </div>
+    <div class="frow">
+      <div class="fgrp"><label>Factory Vendor</label><input type="text" id="ec-pendant" placeholder="Haasina"></div>
+      <div class="fgrp"><label>Sent By</label><input type="text" id="ec-sentby"></div>
+    </div>
+    <button class="btn btn-gold" id="ec-savebtn" onclick="saveEditChallan()">✓ Poora Challan Update Karo</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, query, orderBy, getDocs, updateDoc, where, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyA0D3H-uJBh-pXxpIOWr6vpZ-RH9iLElVk",
+  authDomain:"ornaza-wip.firebaseapp.com",
+  projectId:"ornaza-wip",
+  appId:"1:973952011492:web:f966c6b316e0ebb87430f1"
+});
+const db = getFirestore(app);
+
+// ── STATE ──
+let ALL_ENTRIES=[], CUSTOM_SKUS=[], SKU_MAPPINGS={}, CHAIN_PRICES={}, CHAIN_PRICES_ALL=[], SKU_RATIOS={};
+window.ALL_SKUS=[]; // Ashraful SKUs with photos
+window.EXTRA_SKUS=[]; // Extra SKUs with photos
+let FACTORY_PENDING={}; // Ashraful factory pending per SKU
+let SHIV_PENDING={}; // Shiv Bhai factory pending per SKU
+window.CHAIN_VENDORS = JSON.parse(localStorage.getItem('ornaza_chain_vendors')||'["Ankitbhai"]');
+let _activeVendor=null;
+
+// ── DEFAULT SKUS ──
+const DEFAULT_SKUS = [
+  ...['HMS-102','HMS-104','HMS-107','HMS-114','HMS-116','HMS-123','HMS-125','HMS-135','HMS-136','HMS-137','HMS-157','HMS-160','HMS-161','HMS-183','HMS-203'].map(s=>({sku:s,category:'BESTSELLING'})),
+  ...['HMS-105','HMS-109','HMS-115','HMS-117','HMS-120','HMS-130','HMS-141','HMS-145','HMS-148','HMS-153','HMS-159','HMS-164','HMS-181','HMS-186','HMS-189','HMS-192','HMS-194','HMS-198','HMS-200','HMS-204'].map(s=>({sku:s,category:'GOOD'})),
+  ...['HMS-103','HMS-106','HMS-108','HMS-111','HMS-112','HMS-118','HMS-126','HMS-132','HMS-133','HMS-134','HMS-138','HMS-139','HMS-143','HMS-147','HMS-150','HMS-152','HMS-154','HMS-155','HMS-180','HMS-190','HMS-191','HMS-195','HMS-196','HMS-197','HMS-199','HMS-202','HMS-210','HMS-214','HMS-216'].map(s=>({sku:s,category:'NORMAL'}))
+];
+
+function getAllSkus(){
+  const base = DEFAULT_SKUS.slice();
+  CUSTOM_SKUS.forEach(c=>{ if(!base.find(b=>b.sku===c.sku)) base.push({sku:c.sku,category:c.category}); });
+  return base.sort((a,b)=>a.sku.localeCompare(b.sku,undefined,{numeric:true}));
+}
+window.getAllSkus = getAllSkus;
+
+// ── FIREBASE LISTENERS ──
+setSyncState('syncing','Connecting...');
+onSnapshot(query(collection(db,'entries'),orderBy('ts','asc')), snap=>{
+  ALL_ENTRIES=[];
+  snap.forEach(d=>ALL_ENTRIES.push({...d.data(),_id:d.id}));
+  setSyncState('live','Live');
+  document.getElementById('fb-status').textContent='Connected';
+  renderDash(); renderPipe(); renderHist(); updateChallan();
+}, err=>{ setSyncState('','Error'); console.error(err); });
+
+onSnapshot(collection(db,'custom_skus'), snap=>{
+  CUSTOM_SKUS=[];
+  snap.forEach(d=>CUSTOM_SKUS.push({...d.data(),id:d.id}));
+  renderCustomSkuList();
+});
+
+// Load Ashraful SKU photos for Challan PDF
+onSnapshot(collection(db,'ashraful_skus'), snap=>{
+  window.ALL_SKUS=snap.docs.map(d=>({...d.data(),id:d.id}));
+});
+
+// Load Extra SKUs for Challan PDF
+onSnapshot(collection(db,'extra_skus'), snap=>{
+  window.EXTRA_SKUS=snap.docs.map(d=>({...d.data(),id:d.id}));
+});
+
+// Ashraful Factory — pending orders sync + auto challan on receive
+let _prevFactoryReceives = {}; // track previous receives to detect new ones
+let _factoryFirstLoad = true;
+onSnapshot(collection(db,'factory_orders'), snap=>{
+  FACTORY_PENDING={};
+  const newReceives = {};
+  
+  snap.forEach(d=>{
+    const o=d.data();
+    const sku=o.sku||'';
+    if(!sku) return;
+    const receives = o.receives||[];
+    const received=receives.reduce((a,r)=>a+(r.qty||0),0);
+    const pending=Math.max(0,(o.qty||0)-received);
+    if(pending>0){
+      FACTORY_PENDING[sku]=(FACTORY_PENDING[sku]||0)+pending;
+    }
+    // Track receives for this order
+    newReceives[d.id] = receives.length;
+    
+    // Detect NEW receive (not on first load)
+    if(!_factoryFirstLoad && _prevFactoryReceives[d.id] !== undefined){
+      const prevLen = _prevFactoryReceives[d.id]||0;
+      if(receives.length > prevLen){
+        // New receive added! Create Pendant-In challan entry
+        const newRecv = receives[receives.length-1];
+        if(newRecv && newRecv.qty > 0){
+          _createAshrafulReceiveChallan(sku, newRecv.qty, newRecv.date||new Date().toISOString().split('T')[0], o.vendor||'Ashraful');
+        }
+      }
+    }
+  });
+  
+  _prevFactoryReceives = newReceives;
+  _factoryFirstLoad = false;
+  renderDash();
+});
+
+async function _createAshrafulReceiveChallan(sku, qty, date, vendor){
+  try{
+    // Get next challan number
+    const challanNums = ALL_ENTRIES
+      .filter(e=>!e._autoCreated&&e.challan&&typeof e.challan==='string'&&e.challan.startsWith('C-'))
+      .map(e=>parseInt(e.challan.replace('C-',''))||0);
+    const maxNum = challanNums.length ? Math.max(...challanNums) : 0;
+    const challan = 'C-'+(maxNum+1).toString().padStart(3,'0');
+    const ts = Date.now();
+    
+    await addDoc(collection(db,'entries'),{
+      stage:'Pendant-In',
+      sku,
+      qty,
+      date,
+      vendor,
+      challan,
+      sentby:'Ashraful App',
+      weight:0,
+      ts,
+      _ashrafulAutoReceive:true
+    });
+    showToast('✓ '+sku+' '+qty+' pcs — Pendant-In challan auto bana ('+challan+')','tok');
+  }catch(err){
+    console.error('Auto challan error:',err);
+  }
+}
+
+// Shiv Bhai Factory — pending orders sync
+onSnapshot(collection(db,'shiv_orders'), snap=>{
+  SHIV_PENDING={};
+  snap.forEach(d=>{
+    const o=d.data();
+    const sku=o.sku||'';
+    if(!sku) return;
+    const received=(o.receives||[]).reduce((a,r)=>a+(r.qty||0),0);
+    const pending=Math.max(0,(o.qty||0)-received);
+    if(pending>0){
+      SHIV_PENDING[sku]=(SHIV_PENDING[sku]||0)+pending;
+    }
+  });
+  renderDash();
+});
+
+onSnapshot(collection(db,'sku_mappings'), snap=>{
+  SKU_MAPPINGS={};
+  snap.forEach(d=>{ SKU_MAPPINGS[d.data().factorySku]={yourSku:d.data().yourSku,id:d.id}; });
+  renderSkuMapList();
+});
+
+onSnapshot(collection(db,'chain_prices'), snap=>{
+  CHAIN_PRICES={}; CHAIN_PRICES_ALL=[];
+  snap.forEach(d=>{
+    const data=d.data();
+    CHAIN_PRICES_ALL.push({...data,id:d.id});
+    if(!CHAIN_PRICES[data.sku]) CHAIN_PRICES[data.sku]=data.price;
+  });
+  renderVendorTabs();
+  if(_activeVendor) renderVendorPrices(_activeVendor);
+});
+
+onSnapshot(collection(db,'sku_ratios'), snap=>{
+  SKU_RATIOS={};
+  snap.forEach(d=>{ const data=d.data(); SKU_RATIOS[data.sku.toUpperCase()]={ratio:data.ratio, id:d.id}; });
+  renderSkuRatioList();
+});
+
+function setSyncState(cls,txt){
+  document.getElementById('sdot').className='sync-dot'+(cls?' '+cls:'');
+  document.getElementById('slbl').textContent=txt;
+}
+
+// ── COMPUTE SKU DATA ──
+function computeSku(sku){
+  let plS=0,plR=0,colS=0,colR=0,chS=0,chR=0,reS=0,reR=0,pIn=0,pOut=0;
+  ALL_ENTRIES.forEach(e=>{
+    if(e.sku!==sku) return;
+    const q=Number(e.qty)||0;
+    if(e._autoCreated){
+      if(e.stage==='Plating-Received') plR+=q;
+      if(e.stage==='Color-Received') colR+=q;
+      if(e.stage==='Resetting-Received') reR+=q;
+      if(e.stage==='Pendant-Used') pOut+=q;
+      if(e.stage==='Pendant-In') pIn+=q;
+      return;
+    }
+    if(e.stage==='Plating-Sent') plS+=q;
+    else if(e.stage==='Plating-Received'||e.stage==='Plating-Lost') plR+=q;
+    else if(e.stage==='Color-Sent-Plating'||e.stage==='Color-Sent-Factory') colS+=q;
+    else if(e.stage==='Color-Received') colR+=q;
+    else if(e.stage==='Chain-Sent-Plating'||e.stage==='Chain-Sent-Factory'||e.stage==='Chain-Sent-Resetting'||e.stage==='Chain-Sent-Color'||e.stage==='Chain-Sent-Pendant') chS+=q;
+    else if(e.stage==='Chain-Received'||e.stage==='Chain-Lost') chR+=q;
+    else if(e.stage==='Resetting-Sent'||e.stage==='Resetting-Sent-Factory'||e.stage==='Resetting-Sent-Again'||e.stage==='Resetting-Sent-Color'||e.stage==='Resetting-Sent-Pendant') reS+=q;
+    else if(e.stage==='Resetting-Received'||e.stage==='Resetting-Lost') reR+=q;
+    else if(e.stage==='Pendant-In') pIn+=q;
+  });
+  return {plPend:Math.max(0,plS-plR),colPend:Math.max(0,colS-colR),chPend:Math.max(0,chS-chR),rePend:Math.max(0,reS-reR),pendPend:Math.max(0,pIn-pOut)};
+}
+
+// ── NAVIGATION ──
+window.goPage = function(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pg-'+name).classList.add('active');
+  document.getElementById('bn-'+name).classList.add('active');
+  document.querySelector('.scroll-area').scrollTop=0;
+  if(name==='rep'){ renderReport(); }
+  if(name==='entry'){
+    const d=document.getElementById('e-date');
+    if(!d.value) d.value=new Date().toISOString().split('T')[0];
+    if(!document.getElementById('sku-rows').children.length) addSkuRow();
+    updateChallan();
+  }
+  if(name==='set'){
+    const sak=document.getElementById('settings-api-key');
+    if(sak) sak.value=localStorage.getItem('ornaza_api_key')||'';
+    if(window.renderSkuRatioList) renderSkuRatioList();
+  }
+};
+
+// ── ACCORDION ──
+window.toggleAcc = function(n){
+  const body=document.getElementById('acc-body-'+n);
+  const arrow=document.getElementById('acc-arrow-'+n);
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  arrow.style.transform=open?'rotate(180deg)':'';
+  if(open&&n===1&&!document.getElementById('cb-date').value)
+    document.getElementById('cb-date').value=new Date().toISOString().split('T')[0];
+  if(open&&n===3) renderSkuMapList();
+  if(open&&n===4) renderCustomSkuList();
+  if(open&&n===5){
+    const today=new Date().toISOString().split('T')[0];
+    if(!document.getElementById('rep-from').value) document.getElementById('rep-from').value=today;
+    if(!document.getElementById('rep-to').value) document.getElementById('rep-to').value=today;
+    renderReport();
+  }
+  if(open&&n===6){
+    document.getElementById('api-key-input').value=localStorage.getItem('ornaza_api_key')||'';
+  const sak=document.getElementById('settings-api-key');if(sak) sak.value=localStorage.getItem('ornaza_api_key')||'';
+  }
+  if(open&&n===7){
+    populatePendantDropdowns();
+    renderPendantMappingList();
+  }
+
+  if(open&&n===7) renderChallanDispatch();
+};
+
+// ── DASHBOARD ──
+window.renderDash = function(){
+  const skus=getAllSkus(); let plTot=0,chTot=0,reTot=0;
+  const q=(document.getElementById('dsrch')||{}).value||'';
+  // Apply sort
+  const sortVal = (document.getElementById('dash-sort')||{}).value||'default';
+  // Search: also include SKUs that are mapped to/from the searched pendant
+  let filteredSkus = skus.filter(s=>{
+    if(!q) return true;
+    const ql = q.toLowerCase();
+    if(s.sku.toLowerCase().includes(ql)) return true;
+    // If searched SKU is a pendant, show all products using it
+    const mappedPend = getPendantSkuFor(s.sku);
+    if(mappedPend.toLowerCase().includes(ql)) return true;
+    // If searched SKU is a product, show its pendant SKU too
+    if(Object.values(PENDANT_MAPPINGS||{}).some(p=>p.toLowerCase().includes(ql) && getPendantSkuFor(s.sku).toLowerCase().includes(ql))) return true;
+    return false;
+  });
+  if(sortVal==='sales7'){
+    filteredSkus.sort((a,b)=>((window.SHOPIFY_SALES||{})[b.sku]||0)-((window.SHOPIFY_SALES||{})[a.sku]||0));
+  } else if(sortVal==='days_asc'){
+    filteredSkus.sort((a,b)=>{
+      const da=(window.SHOPIFY_DAYS||{})[a.sku]??9999;
+      const db=(window.SHOPIFY_DAYS||{})[b.sku]??9999;
+      return da-db;
+    });
+  } else if(sortVal==='days_desc'){
+    filteredSkus.sort((a,b)=>{
+      const da=(window.SHOPIFY_DAYS||{})[a.sku]??-1;
+      const db=(window.SHOPIFY_DAYS||{})[b.sku]??-1;
+      return db-da;
+    });
+  } else if(sortVal==='stock_desc'){
+    filteredSkus.sort((a,b)=>((window.SHOPIFY_STOCK||{})[b.sku]||0)-((window.SHOPIFY_STOCK||{})[a.sku]||0));
+  } else if(sortVal==='high_sell_low_stock'){
+    filteredSkus.sort((a,b)=>{
+      const salesA=(window.SHOPIFY_SALES||{})[a.sku]||0;
+      const salesB=(window.SHOPIFY_SALES||{})[b.sku]||0;
+      const stockA=(window.SHOPIFY_STOCK||{})[a.sku]??9999;
+      const stockB=(window.SHOPIFY_STOCK||{})[b.sku]??9999;
+      const daysA=(window.SHOPIFY_DAYS||{})[a.sku]??9999;
+      const daysB=(window.SHOPIFY_DAYS||{})[b.sku]??9999;
+      // Score = sales / (stock + 1) — higher = more urgent
+      const scoreA=salesA/(stockA+1);
+      const scoreB=salesB/(stockB+1);
+      return scoreB-scoreA;
+    });
+  }
+  const rows=filteredSkus.map(s=>{
+    const {plPend,colPend,chPend,rePend,pendPend}=computeSku(s.sku);
+    const liveStock=(window.SHOPIFY_STOCK||{})[s.sku];
+    plTot+=plPend; chTot+=chPend; reTot+=rePend;
+    const active=plPend>0||colPend>0||pendPend>0||chPend>0||rePend>0;
+    const catBadge=s.category==='BESTSELLING'?'bg-gold':s.category==='GOOD'?'bg-grn':'bg-pur';
+    return `<tr>
+      <td><span class="mono fw6" style="color:var(--gold)">${s.sku}</span></td>
+      <td><span class="badge ${catBadge}" style="font-size:8px">${s.category==='BESTSELLING'?'★':s.category==='GOOD'?'◆':'●'}</span></td>
+      <td><span class="mono fw6" style="color:${liveStock!=null&&liveStock>0?'var(--grn)':liveStock===0?'var(--red)':'var(--mut)'}">${liveStock!=null?liveStock:'—'}</span></td>
+      <td>${(function(){const d=(window.SHOPIFY_DAYS||{})[s.sku];if(d==null)return '<span style="color:var(--mut)">—</span>';const clr=d<=7?'var(--red)':d<=15?'var(--amb)':d<=30?'var(--gold)':'var(--grn)';return '<span class="mono fw6" style="color:'+clr+'">'+d+' days</span>';})()}</td>
+      <td>${(function(){const s7=(window.SHOPIFY_SALES||{})[s.sku];if(!s7)return '<span style="color:var(--mut)">—</span>';return '<span class="mono fw6" style="color:var(--tel)">'+s7+' pcs</span>';})()}</td>
+      <td>${(function(){
+        const mappedSku = getPendantSkuFor(s.sku);
+        if(mappedSku===s.sku){
+          return pendPend>0?'<span class="mono" style="color:#9C27B0">'+pendPend+'</span>':'<span style="color:var(--mut)">—</span>';
+        } else {
+          const mappedPend = computeSku(mappedSku).pendPend||0;
+          return mappedPend>0?'<span class="mono" style="color:#9C27B0">'+mappedPend+'<span style="font-size:9px;color:var(--mut2)"> ('+mappedSku+')</span></span>':'<span style="color:var(--red)">0 ('+mappedSku+')</span>';
+        }
+      })()}</td>
+      <td><span class="mono" style="color:${chPend>0?'var(--tel)':'var(--mut)'}">${chPend||'—'}</span></td>
+      <td>${(function(){
+        const fp=FACTORY_PENDING[s.sku]||0;
+        return fp>0?'<span class="mono fw6" style="color:var(--red)">'+fp+'</span>':'<span style="color:var(--mut)">—</span>';
+      })()}</td>
+      <td>${(function(){
+        const sp=SHIV_PENDING[s.sku]||0;
+        return sp>0?'<span class="mono fw6" style="color:var(--red)">'+sp+'</span>':'<span style="color:var(--mut)">—</span>';
+      })()}</td>
+      <td>${(function(){
+        const mappedSku = getPendantSkuFor(s.sku);
+        if(mappedSku===s.sku){
+          return rePend>0?'<span class="mono" style="color:var(--amb)">'+rePend+'</span>':'<span style="color:var(--mut)">—</span>';
+        } else {
+          const mappedRe = computeSku(mappedSku).rePend||0;
+          return mappedRe>0?'<span class="mono" style="color:var(--amb)">'+mappedRe+'<span style="font-size:9px;color:var(--mut2)"> ('+mappedSku+')</span></span>':'<span style="color:var(--mut)">—</span>';
+        }
+      })()}</td>
+      <td><span class="mono" style="color:${plPend>0?'var(--pur)':'var(--mut)'}">${plPend||'—'}</span></td>
+      <td><span class="mono" style="color:${colPend>0?'#E91E8C':'var(--mut)'}">${colPend||'—'}</span></td>
+      <td><span class="badge ${active?'bg-amb':'bg-grn'}">${active?'Active':'Clear'}</span></td>
+    </tr>`;
+  });
+  document.getElementById('dash-tbl').innerHTML=rows.join('')||'<tr><td colspan="12"><div class="empty">Koi SKU nahi</div></td></tr>';
+  document.getElementById('dc-pl').textContent=plTot;
+  document.getElementById('dc-ch').textContent=chTot;
+  document.getElementById('dc-re').textContent=reTot;
+  document.getElementById('dc-en').textContent=ALL_ENTRIES.filter(e=>!e._autoCreated).length;
+  let colTot=0,pendTot=0;
+  let ashrafulTot=0,shivTot=0;
+  getAllSkus().forEach(s=>{
+    const r=computeSku(s.sku);
+    colTot+=(r.colPend||0);
+    pendTot+=(r.pendPend||0);
+    ashrafulTot+=(FACTORY_PENDING[s.sku]||0);
+    shivTot+=(SHIV_PENDING[s.sku]||0);
+  });
+  const colEl=document.getElementById('dc-col'); if(colEl) colEl.textContent=colTot;
+  const pendEl=document.getElementById('dc-pend'); if(pendEl) pendEl.textContent=pendTot;
+  const ashEl=document.getElementById('dc-ashraful'); if(ashEl) ashEl.textContent=ashrafulTot||'—';
+  const shivEl=document.getElementById('dc-shiv'); if(shivEl) shivEl.textContent=shivTot||'—';
+  // Show stock sync status
+  const stockCount=Object.keys(window.SHOPIFY_STOCK||{}).length;
+  const syncTime=localStorage.getItem('ornaza_shopify_sync_time')||'';
+  const stockBadge=document.getElementById('stock-sync-badge');
+  if(stockBadge) stockBadge.textContent=stockCount>0?'📦 Stock synced'+( syncTime?' · '+syncTime:''):'📦 Stock not synced — click 🔄';
+};
+
+// ── ENTRY FORM ──
+window.addSkuRow = function(){
+  const wrap=document.createElement('div');
+  wrap.className='sku-item';
+  const rowNum=document.getElementById('sku-rows').children.length+1;
+  const stage=document.getElementById('e-stage').value;
+  const showWt=stage==='Plating-Sent';
+  wrap.innerHTML=`
+    <div class="sku-item-hdr">
+      <span class="sku-item-num">SKU ${rowNum}</span>
+      <button class="ski-rm" onclick="this.closest('.sku-item').remove()">✕</button>
+    </div>
+    <div class="fgrp"><label>SKU</label>
+      <div class="sku-wrap">
+        <input class="sku-inp" type="text" placeholder="125 likhke search karo..." autocomplete="off">
+        <div class="sku-drop"></div>
+      </div>
+      <input type="hidden" class="sku-val">
+    </div>
+    <div class="fgrp"><label>Qty (Pieces)</label><input type="number" class="sku-qty" placeholder="0" inputmode="numeric"></div>
+    ${showWt?'<div class="fgrp"><label>Weight (grams)</label><input type="number" class="sku-wt" placeholder="0.0" inputmode="decimal" step="0.1"></div>':''}
+  `;
+  const inp=wrap.querySelector('.sku-inp');
+  const drop=wrap.querySelector('.sku-drop');
+  const val=wrap.querySelector('.sku-val');
+  inp.addEventListener('input',()=>{
+    const q=inp.value.toLowerCase();
+    const matches=getAllSkus().filter(s=>s.sku.toLowerCase().includes(q)).slice(0,10);
+    if(!matches.length){drop.classList.remove('open');return;}
+    drop.innerHTML=matches.map(s=>`<div class="sku-opt">${s.sku}</div>`).join('');
+    drop.querySelectorAll('.sku-opt').forEach(o=>o.addEventListener('mousedown',e=>{
+      e.preventDefault(); inp.value=o.textContent; val.value=o.textContent; drop.classList.remove('open');
+      setTimeout(()=>wrap.querySelector('.sku-qty')?.focus(),50);
+    }));
+    drop.classList.add('open');
+  });
+  // Enter on SKU input → select first match
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){
+      e.preventDefault();
+      const first=drop.querySelector('.sku-opt');
+      if(first){
+        inp.value=first.textContent; val.value=first.textContent; drop.classList.remove('open');
+        setTimeout(()=>wrap.querySelector('.sku-qty')?.focus(),50);
+      }
+    }
+  });
+  inp.addEventListener('blur',()=>setTimeout(()=>drop.classList.remove('open'),200));
+  // Fix: Scroll se qty change band karo
+  const qtyInp=wrap.querySelector('.sku-qty');
+  if(qtyInp){
+    qtyInp.addEventListener('wheel',e=>e.preventDefault(),{passive:false});
+    // Enter dabane pe next SKU add karo + us SKU ka input focus karo
+    qtyInp.addEventListener('keydown',e=>{
+      if(e.key==='Enter'){
+        e.preventDefault();
+        addSkuRow();
+        // Next SKU row ka SKU input focus karo
+        setTimeout(()=>{
+          const rows=document.querySelectorAll('#sku-rows .sku-item');
+          const lastRow=rows[rows.length-1];
+          if(lastRow) lastRow.querySelector('.sku-inp')?.focus();
+        },60);
+      }
+    });
+  }
+  document.getElementById('sku-rows').appendChild(wrap);
+};
+
+window.onStage = function(){
+  const stage=document.getElementById('e-stage').value;
+  document.getElementById('vlbl').textContent=
+    stage.startsWith('Chain')?'Chain Vendor':
+    stage.startsWith('Resetting')?'Resetting Vendor':'Plating/Chain Vendor';
+  document.querySelectorAll('.sku-wt').forEach(w=>w.closest('.fgrp').style.display=stage==='Plating-Sent'?'flex':'none');
+};
+
+window.updateChallan = function(){
+  const date=document.getElementById('e-date').value;
+  if(!date){document.getElementById('e-challan').value='';return;}
+  // Get max challan number from all entries
+  const challanNums=ALL_ENTRIES
+    .filter(e=>!e._autoCreated&&e.challan&&typeof e.challan==='string'&&e.challan.startsWith('C-'))
+    .map(e=>parseInt(e.challan.replace('C-',''))||0);
+  const maxNum=challanNums.length?Math.max(...challanNums):0;
+  document.getElementById('e-challan').value='C-'+(maxNum+1).toString().padStart(3,'0');
+};
+window.updateAutoChallan=window.updateChallan;
+
+window.clearForm = function(){
+  document.getElementById('e-stage').value='Plating-Sent';
+  document.getElementById('e-vendor').value='Regular';
+  document.getElementById('e-pendant').value='';
+  document.getElementById('e-sentby').value='';
+  document.getElementById('e-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('sku-rows').innerHTML='';
+  addSkuRow(); updateChallan();
+};
+
+window.saveEntry = async function(){
+  const stage=document.getElementById('e-stage').value;
+  const vendor=document.getElementById('e-vendor').value.trim();
+  const pendant=document.getElementById('e-pendant').value.trim();
+  const sentby=document.getElementById('e-sentby').value.trim();
+  const date=document.getElementById('e-date').value;
+  if(!date){showToast('Date daalo','terr');return;}
+  // Generate challan if empty
+  let challan=document.getElementById('e-challan').value;
+  if(!challan){
+    const challanNums=ALL_ENTRIES
+      .filter(e=>!e._autoCreated&&e.challan&&typeof e.challan==='string'&&e.challan.startsWith('C-'))
+      .map(e=>parseInt(e.challan.replace('C-',''))||0);
+    const maxNum=challanNums.length?Math.max(...challanNums):0;
+    challan='C-'+(maxNum+1).toString().padStart(3,'0');
+  }
+  const items=[];
+  document.querySelectorAll('#sku-rows .sku-item').forEach(row=>{
+    const sku=(row.querySelector('.sku-val').value||row.querySelector('.sku-inp').value).trim().toUpperCase();
+    const qty=Number(row.querySelector('.sku-qty').value)||0;
+    const wtEl=row.querySelector('.sku-wt');
+    const wt=wtEl?Number(wtEl.value)||0:0;
+    if(sku&&qty>0) items.push({sku,qty,wt});
+  });
+  if(!items.length){showToast('Kam se kam 1 SKU daalo','terr');return;}
+  const btn=document.getElementById('savebtn');
+  btn.disabled=true;btn.textContent='Saving...';
+  try{
+    const ts=Date.now();
+    const mainStage = stage==='Resetting-Mila-RawPendant' ? 'Resetting-Received' : stage;
+    const saves=items.map((it,i)=>addDoc(collection(db,'entries'),{
+      stage:mainStage,vendor,pendantVendor:pendant,sentby,date,challan,
+      sku:it.sku,qty:it.qty,weight:it.wt,ts:ts+i
+    }));
+    await Promise.all(saves);
+    // Auto entries
+    const autoItems=items.slice();
+    let autoStage=null;
+    if(stage==='Chain-Sent-Plating'||stage==='Resetting-Sent'||stage==='Color-Sent-Plating') autoStage='Plating-Received';
+    if(stage==='Chain-Sent-Resetting'||stage==='Resetting-Sent-Again') autoStage='Resetting-Received';
+    if(stage==='Chain-Sent-Color'||stage==='Resetting-Sent-Color') autoStage='Color-Received';
+    if(stage==='Chain-Sent-Pendant'){
+      autoStage='Pendant-Used';
+    }
+    // Resetting Mila — Raw Pendant: Pendant-In auto entry
+    if(stage==='Resetting-Mila-RawPendant'){
+      console.log('DEBUG: Creating Pendant-In entries, challan=', challan, 'items=', autoItems);
+      const pendantChallan = challan ? challan+'P' : 'C-000P';
+      const pendantSaves=autoItems.map((it,i)=>{
+        console.log('DEBUG: Adding Pendant-In for SKU', it.sku, 'qty', it.qty);
+        return addDoc(collection(db,'entries'),{
+          stage:'Pendant-In',vendor,pendantVendor:pendant,sentby,date,
+          challan:pendantChallan,
+          sku:it.sku,qty:it.qty,weight:0,ts:ts+2000+i,_autoCreated:true
+        });
+      });
+      await Promise.all(pendantSaves);
+      console.log('DEBUG: Pendant-In entries saved!');
+    } else if(autoStage){
+      const autoSaves=autoItems.map((it,i)=>{
+        const autoSkuFinal = (autoStage==='Pendant-Used') ? getPendantSkuFor(it.sku) : it.sku;
+        return addDoc(collection(db,'entries'),{
+          stage:autoStage,vendor,pendantVendor:pendant,sentby,date,challan,
+          sku:autoSkuFinal,qty:it.qty,weight:0,ts:ts+1000+i,_autoCreated:true
+        });
+      });
+      await Promise.all(autoSaves);
+    }
+    showToast('✓ '+items.length+' SKU save ho gaya','tok');
+    btn.disabled=false;btn.textContent='✓ Save Karo';
+    clearForm();
+  }catch(err){
+    btn.disabled=false;btn.textContent='✓ Save Karo';
+    showToast('Error: '+err.message,'terr');
+  }
+};
+
+// ── PIPELINE ──
+let pipeFilter='all';
+window.setPF = function(f,el){
+  pipeFilter=f;
+  document.querySelectorAll('#pg-pipe .spill').forEach(b=>{
+    b.className='spill';
+    if(b===el) b.className='spill '+(f==='all'?'act':f==='Plating'?'act-pl':f==='Chain'?'act-ch':f==='Resetting'?'act-re':'act-rd');
+  });
+  renderPipe();
+};
+window.renderPipe = function(){
+  const q=(document.getElementById('psrch')||{}).value||'';
+  const skus=getAllSkus().filter(s=>!q||s.sku.toLowerCase().includes(q.toLowerCase()));
+  let rows='',plTot=0,chTot=0,reTot=0;
+  skus.forEach(s=>{
+    const {plPend,chPend,rePend}=computeSku(s.sku);
+    plTot+=plPend;chTot+=chPend;reTot+=rePend;
+    if(pipeFilter==='pending'&&!plPend&&!chPend&&!rePend) return;
+    if(pipeFilter==='Plating'&&!plPend) return;
+    if(pipeFilter==='Chain'&&!chPend) return;
+    if(pipeFilter==='Resetting'&&!rePend) return;
+    rows+=`<div class="dcard">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span class="mono fw6" style="color:var(--gold)">${s.sku}</span>
+        <span class="badge ${s.category==='BESTSELLING'?'bg-gold':s.category==='GOOD'?'bg-grn':'bg-pur'}" style="font-size:8px">${s.category}</span>
+      </div>
+      ${plPend>0?`<div class="drow"><span style="font-size:11px;color:var(--pur)">Plating Pending</span><span class="mono fw6" style="color:var(--pur)">${plPend} pcs</span></div>`:''}
+      ${chPend>0?`<div class="drow"><span style="font-size:11px;color:var(--tel)">Chain Pending</span><span class="mono fw6" style="color:var(--tel)">${chPend} pcs</span></div>`:''}
+      ${rePend>0?`<div class="drow"><span style="font-size:11px;color:var(--amb)">Resetting Pending</span><span class="mono fw6" style="color:var(--amb)">${rePend} pcs</span></div>`:''}
+      ${!plPend&&!chPend&&!rePend?`<div style="font-size:11px;color:var(--grn);padding:4px 0">✓ Sab clear hai</div>`:''}
+    </div>`;
+  });
+  document.getElementById('pipe-sum').innerHTML=`<div class="cards" style="margin-bottom:10px">
+    <div class="card cp"><div class="card-lbl">Plating</div><div class="card-val">${plTot}</div></div>
+    <div class="card ct"><div class="card-lbl">Chain</div><div class="card-val">${chTot}</div></div>
+    <div class="card ca"><div class="card-lbl">Resetting</div><div class="card-val">${reTot}</div></div>
+    <div class="card cg"><div class="card-lbl">Total Pending</div><div class="card-val">${plTot+chTot+reTot}</div></div>
+  </div>`;
+  document.getElementById('pipe-list').innerHTML=rows||'<div class="empty">Koi pending nahi ✓</div>';
+};
+
+// ── HISTORY ──
+let histToggle='diya', histFilter='plating';
+window.setHT = function(t){
+  histToggle=t;
+  const dy=document.getElementById('htgl-diya');
+  const ay=document.getElementById('htgl-aaya');
+  if(t==='diya'){
+    dy.style.background='var(--gold)';dy.style.color='#fff';dy.style.borderColor='var(--gold)';
+    ay.style.background='transparent';ay.style.color='var(--mut2)';ay.style.borderColor='var(--brd2)';
+  } else {
+    ay.style.background='var(--grn)';ay.style.color='#fff';ay.style.borderColor='var(--grn)';
+    dy.style.background='transparent';dy.style.color='var(--mut2)';dy.style.borderColor='var(--brd2)';
+  }
+  renderHist();
+};
+window.setHF = function(f,el){
+  histFilter=f;
+  document.querySelectorAll('#pg-hist .stage-pills .spill').forEach(b=>{
+    b.className='spill';
+    if(b===el) b.className='spill act';
+  });
+  renderHist();
+};
+
+const stageTags = {
+  'Chain-Sent-Plating':'Plating se','Chain-Sent-Factory':'Factory se',
+  'Chain-Sent-Resetting':'Resetting se','Chain-Sent-Color':'Color se',
+  'Resetting-Sent':'Plating se','Resetting-Sent-Factory':'Factory se',
+  'Resetting-Sent-Again':'Dobara','Resetting-Sent-Color':'Color se',
+  'Color-Sent-Plating':'Plating se','Color-Sent-Factory':'Factory se',
+  'Chain-Sent-Pendant':'Raw Pendant se','Resetting-Sent-Pendant':'Raw Pendant se','Pendant-In':'Stock Add','Resetting-Mila-RawPendant':'Reset+Pendant'
+};
+
+window.renderHist = function(){
+  const q=(document.getElementById('hsrch')||{}).value||'';
+  const isDiya=histToggle==='diya';
+  const stageMap={
+    plating:{diya:['Plating-Sent','Plating-Lost'],aaya:['Plating-Received','Plating-Lost']},
+    color:{diya:['Color-Sent-Plating','Color-Sent-Factory'],aaya:['Color-Received']},
+    pendant:{diya:['Pendant-In'],aaya:['Pendant-Used']},
+    chain:{diya:['Chain-Sent-Plating','Chain-Sent-Factory','Chain-Sent-Resetting','Chain-Sent-Color','Chain-Sent-Pendant','Chain-Lost'],aaya:['Chain-Received','Chain-Lost']},
+    resetting:{diya:['Resetting-Sent','Resetting-Sent-Factory','Resetting-Sent-Again','Resetting-Sent-Color','Resetting-Lost'],aaya:['Resetting-Received','Resetting-Lost']},
+    lost:{diya:['Plating-Lost','Chain-Lost','Resetting-Lost'],aaya:['Plating-Lost','Chain-Lost','Resetting-Lost']}
+  };
+  const validStages=stageMap[histFilter]?.[isDiya?'diya':'aaya']||[];
+  if(histFilter==='lost'){
+    // lost tab — simple list
+    const entries=ALL_ENTRIES.filter(e=>!e._autoCreated&&validStages.includes(e.stage)&&(!q||e.sku.toLowerCase().includes(q.toLowerCase())));
+    if(!entries.length){document.getElementById('hist-list').innerHTML='<div class="empty">Koi entry nahi</div>';return;}
+    document.getElementById('hist-list').innerHTML=entries.sort((a,b)=>b.ts-a.ts).map(e=>`
+      <div class="dcard">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><span class="mono fw6" style="color:var(--gold)">${e.sku}</span><span class="mono" style="color:var(--red);margin-left:8px">${e.qty} pcs</span></div>
+          <div style="display:flex;gap:6px">
+            <span class="badge bg-red">${e.stage.replace('-Lost','')}</span>
+            <button onclick="openEdit('${e._id}')" style="background:var(--abg);border:1px solid var(--abrd);color:var(--amb);border-radius:6px;padding:3px 8px;font-size:10px;font-family:var(--sans);cursor:pointer">Edit</button>
+            <button onclick="delEntry('${e._id}')" style="background:var(--rbg);border:1px solid var(--rbrd);color:var(--red);border-radius:6px;padding:3px 8px;font-size:10px;font-family:var(--sans);cursor:pointer">Del</button>
+          </div>
+        </div>
+        <div style="font-size:10px;color:var(--mut2);margin-top:4px">${e.date} | ${e.vendor||''}</div>
+      </div>`).join('');
+    return;
+  }
+  // For AAYA tabs - show auto-created entries too (Plating-Received, Resetting-Received)
+  const isAayaTab = !isDiya;
+  const entries=ALL_ENTRIES.filter(e=>{
+    if(e._autoCreated && isDiya && e.stage!=='Pendant-In') return false; // hide auto in DIYA except Pendant-In
+    if(!validStages.includes(e.stage)) return false;
+    if(q && !e.sku.toLowerCase().includes(q.toLowerCase())) return false;
+    return true;
+  });
+  if(!entries.length){document.getElementById('hist-list').innerHTML='<div class="empty">Koi entry nahi</div>';return;}
+
+  // Group by challan — entries saved within 3 seconds = same challan
+  // Sort by ts first
+  const sortedE=[...entries].sort((a,b)=>(a.ts||0)-(b.ts||0));
+  const byKey={};
+  const tsGroups=[]; // [{key, minTs, maxTs}]
+  
+  sortedE.forEach(e=>{
+    const ch=e.challan&&String(e.challan).trim();
+    let key;
+    if(ch){
+      key=ch;
+    } else {
+      // Group by ts proximity (within 5000ms = same save batch)
+      const ts=typeof e.ts==='number'?e.ts:new Date(e.ts||0).getTime();
+      const grp=tsGroups.find(g=>Math.abs(ts-g.maxTs)<5000&&g.stage===e.stage&&g.vendor===(e.vendor||''));
+      if(grp){key=grp.key;grp.maxTs=Math.max(grp.maxTs,ts);}
+      else{key='batch_'+ts;tsGroups.push({key,minTs:ts,maxTs:ts,stage:e.stage,vendor:e.vendor||''});}
+    }
+    if(!byKey[key]) byKey[key]={date:e.date,vendor:e.vendor||'',pendantVendor:e.pendantVendor||'',sentby:e.sentby||'',challan:ch||key,skus:[],entries:[]};
+    byKey[key].skus.push(e);
+    byKey[key].entries.push(e);
+    byKey[key].skus.sort((a,b)=>a.sku.localeCompare(b.sku,undefined,{numeric:true}));
+  });
+
+  const sorted=Object.entries(byKey).sort((a,b)=>b[0].localeCompare(a[0]));
+  const color=histFilter==='plating'?'var(--pur)':histFilter==='chain'?'var(--tel)':'var(--amb)';
+
+  // Store data in window map for onclick access
+  window._ecData={};
+  sorted.forEach(([key,ch],challanIdx)=>{
+    window._ecData[key]={ids:ch.skus.map(s=>s._id).filter(Boolean),date:ch.date,vendor:ch.vendor||'',pendantVendor:ch.pendantVendor||'',sentby:ch.sentby||''};
+  });
+
+  window._ecData={};
+  window._dispData={};
+  window._challans={};
+  window._challanArr=[];
+  let html='';
+  sorted.forEach(([key,ch],challanIdx)=>{
+    const allIds=ch.skus.map(s=>s._id).filter(Boolean);
+    // Store data for onclick access
+    window._ecData[key]={ids:allIds,date:ch.date,vendor:ch.vendor||'',pendantVendor:ch.pendantVendor||'',sentby:ch.sentby||''};
+    window._dispData[key]=allIds;
+    window._challans[key]=ch;
+    window._challanArr[challanIdx]={key,ch};
+    const totQty=ch.skus.reduce((a,s)=>a+(Number(s.qty)||0),0);
+    const totWt=ch.skus.reduce((a,s)=>a+(Number(s.weight)||0),0);
+    html+=`<div class="dcard">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div class="mono fw6" style="color:var(--gold);font-size:13px">${ch.challan||ch.date}</div>
+          <div style="font-size:11px;color:var(--mut2);margin-top:2px">${ch.date}${ch.vendor?' · '+ch.vendor:''}${ch.pendantVendor?' · '+ch.pendantVendor:''}${ch.sentby?' · '+ch.sentby:''}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="mono fw6" style="color:${color};font-size:16px">${totQty} pcs</div>
+          ${isDiya&&histFilter==='plating'&&totWt>0?`<div class="mono fw6" style="color:var(--grn);font-size:13px">${totWt}g</div>`:''}
+          <div style="display:flex;gap:5px;margin-top:4px">
+            <button onclick="openECByIdx(${challanIdx})" style="background:var(--abg);border:1px solid var(--abrd);color:var(--amb);border-radius:6px;padding:4px 10px;font-size:10px;font-family:var(--sans);cursor:pointer;font-weight:600">Edit</button>
+            <button onclick="downloadPDFByIdx(${challanIdx})" style="background:var(--sur2);border:1px solid var(--brd2);color:var(--grn);border-radius:6px;padding:4px 10px;font-size:10px;font-family:var(--sans);cursor:pointer;font-weight:600">📄 PDF</button>
+            <button onclick="event.stopPropagation();delChallan(${JSON.stringify(allIds)})" style="background:var(--rbg);border:1px solid var(--rbrd);color:var(--red);border-radius:6px;padding:4px 10px;font-size:10px;font-family:var(--sans);cursor:pointer;font-weight:600;position:relative;z-index:10">Del</button>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:10px">`;
+    ch.skus.forEach(s=>{
+      html+=`<div style="padding:7px 0;border-bottom:1px solid var(--brd)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">
+            <span class="mono fw6" style="color:var(--gold);font-size:13px">${s.sku}</span>
+            <span class="mono fw6" style="color:${color};font-size:13px">${s.qty} pcs</span>
+            ${isDiya&&histFilter==='plating'&&s.weight>0?`<span class="mono" style="color:var(--grn);font-size:11px">${s.weight}g</span>`:''}
+            ${stageTags[s.stage]?`<span style="font-size:9px;background:var(--sur3);color:var(--mut2);border-radius:4px;padding:1px 5px">${stageTags[s.stage]}</span>`:''}
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
+            <button onclick="openEdit('${s._id}')" style="background:var(--abg);border:1px solid var(--abrd);color:var(--amb);border-radius:6px;padding:3px 8px;font-size:10px;font-family:var(--sans);cursor:pointer">Edit</button>
+            <button onclick="delEntry('${s._id}')" style="background:var(--rbg);border:1px solid var(--rbrd);color:var(--red);border-radius:6px;padding:3px 8px;font-size:10px;font-family:var(--sans);cursor:pointer">Del</button>
+          </div>
+        </div>
+      </div>`;
+    });
+    // Challan dispatch section
+    const chDispatched = ch.entries.some(e=>e._challanDispatched);
+    const chDispatchDate = ch.entries.find(e=>e._dispatchDate)?._dispatchDate||'';
+    const chTotalQty = ch.skus.reduce((a,s)=>a+(Number(s.qty)||0),0);
+    const chTotalSkus = ch.skus.length;
+    html+=buildDispatchSection(allIds, chDispatched, chDispatchDate, chTotalSkus, chTotalQty);
+    html+='</div></div>';
+  });
+  document.getElementById('hist-list').innerHTML=html;
+};
+
+// ── DISPATCHED ──
+window.toggleDispatched = async function(id,checked){
+  try{ await updateDoc(doc(db,'entries',id),{_dispatched:checked}); }
+  catch(err){ showToast('Error: '+err.message,'terr'); }
+};
+
+// ── EDIT CHALLAN ──
+let _challanIds=[];
+window.openEditChallan = function(key,date,vendor,sentby,ids){
+  _challanIds=ids||[];
+  document.getElementById('ec-date').value=date;
+  document.getElementById('ec-vendor').value=vendor;
+  document.getElementById('ec-sentby').value=sentby;
+  const m=document.getElementById('ec-modal');
+  m.style.display='flex';
+  m.onclick=e=>{if(e.target===m)m.style.display='none';};
+};
+window.openECByIdx = function(idx){
+  const item = window._challanArr&&window._challanArr[idx];
+  if(!item) return;
+  const key = item.key;
+  window._ecData&&window._ecData[key]&&openECModal(window._ecData[key]);
+};
+window.downloadPDFByIdx = function(idx){
+  const item = window._challanArr&&window._challanArr[idx];
+  if(!item) return;
+  downloadChallanPDF(item.key);
+};
+window.openECModal = function(data){
+  _challanIds=data.ids||[];
+  document.getElementById('ec-date').value=data.date||'';
+  document.getElementById('ec-vendor').value=data.vendor||'';
+  document.getElementById('ec-pendant').value=data.pendantVendor||'';
+  document.getElementById('ec-sentby').value=data.sentby||'';
+  
+  // Build qty inputs directly in the list element
+  const qtyListEl=document.getElementById('ec-qty-list');
+  const qtyEl=document.getElementById('ec-qty');
+  if(qtyEl) qtyEl.parentElement.style.display='none';
+  
+  if(qtyListEl){
+    qtyListEl.style.display='block';
+    const entries=_challanIds.map(function(id){ return ALL_ENTRIES.find(function(e){ return e._id===id; }); }).filter(Boolean);
+    if(entries.length>0){
+      var html='<label style="font-size:11px;color:var(--mut2);text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:4px">SKU Quantities</label>';
+      entries.forEach(function(e){
+        html+='<div style="display:flex;align-items:center;gap:8px;margin-top:6px">'+
+          '<span style="font-family:var(--mono);font-size:13px;font-weight:700;min-width:80px">'+e.sku+'</span>'+
+          '<input type="number" class="ec-qty-inp" data-entry-id="'+e._id+'" value="'+e.qty+'" min="1" style="width:80px;padding:5px 8px;border:1.5px solid var(--brd);border-radius:6px;font-size:14px;font-weight:700"/>'+
+          '<span style="font-size:11px;color:var(--mut2)">pcs</span>'+
+          '</div>';
+      });
+      qtyListEl.innerHTML=html;
+    } else {
+      qtyListEl.innerHTML='<div style="font-size:12px;color:var(--mut2)">No entries found</div>';
+    }
+  }
+  
+  const m=document.getElementById('ec-modal');
+  m.style.display='flex';
+  m.onclick=function(e){if(e.target===m)m.style.display='none';};
+};
+window.saveEditChallan = async function(){
+  if(!_challanIds.length){showToast('Koi entry nahi','terr');return;}
+  const date=document.getElementById('ec-date').value;
+  const vendor=document.getElementById('ec-vendor').value||'';
+  const pendant=document.getElementById('ec-pendant').value||'';
+  const sentby=document.getElementById('ec-sentby').value||'';
+  if(!date){showToast('Date daalo','terr');return;}
+  const btn=document.getElementById('ec-savebtn');
+  btn.disabled=true;btn.textContent='Updating...';
+  try{
+    // Collect per-entry qty values from inputs
+    const qtyInputs={};
+    document.querySelectorAll('.ec-qty-inp').forEach(function(inp){
+      const val=Number(inp.value);
+      if(val>0) qtyInputs[inp.dataset.entryId]=val;
+    });
+    console.log('DEBUG qtyInputs:', JSON.stringify(qtyInputs));
+    // Update main entries
+    await Promise.all(_challanIds.map(id=>{
+      const updateData={date,vendor,pendantVendor:pendant,sentby};
+      if(qtyInputs[id]) updateData.qty=qtyInputs[id];
+      return updateDoc(doc(db,'entries',id),updateData);
+    }));
+
+    // If Chain-Sent-Pendant — also update linked Pendant-Used auto entries
+    const firstEntry = ALL_ENTRIES.find(e=>e._id===_challanIds[0]);
+    if(firstEntry && firstEntry.stage==='Chain-Sent-Pendant' && Object.keys(qtyInputs).length>0){
+      const challanNo = firstEntry.challan;
+      // Find auto-created Pendant-Used entries with same challan
+      const linkedEntries = ALL_ENTRIES.filter(e=>
+        e._autoCreated && 
+        e.stage==='Pendant-Used' && 
+        e.challan===challanNo
+      );
+      if(linkedEntries.length>0){
+        // Match by SKU - update qty in pendant-used entries
+        await Promise.all(linkedEntries.map(le=>{
+          // Find corresponding chain entry by SKU
+          const chainEntry = ALL_ENTRIES.find(e=>_challanIds.includes(e._id)&&e.sku===le.sku);
+          if(chainEntry && qtyInputs[chainEntry._id]){
+            return updateDoc(doc(db,'entries',le._id),{qty:qtyInputs[chainEntry._id],date});
+          }
+          return Promise.resolve();
+        }));
+        showToast('✓ Chain bheja + Pendant aaya dono update ho gaye!','tok');
+      } else {
+        showToast('✓ Challan update ho gaya','tok');
+      }
+    } else {
+      showToast('✓ Challan update — '+_challanIds.length+' entries','tok');
+    }
+
+    document.getElementById('ec-modal').style.display='none';
+    btn.disabled=false;btn.textContent='✓ Poora Challan Update Karo';
+  }catch(err){
+    btn.disabled=false;btn.textContent='✓ Poora Challan Update Karo';
+    showToast('Error: '+err.message,'terr');
+  }
+};
+
+// ── DELETE ──
+window.delEntry = async function(id){
+  if(!confirm('Yeh entry delete karo?')) return;
+  await deleteDoc(doc(db,'entries',id));
+  showToast('Entry delete ho gayi','tok');
+};
+window.delChallan = async function(ids){
+  if(!confirm(ids.length+' entries wala poora challan delete karo?')) return;
+  await Promise.all(ids.map(id=>deleteDoc(doc(db,'entries',id))));
+  showToast('Challan delete ho gaya','tok');
+};
+
+// ── EDIT SINGLE ENTRY ──
+window.openEdit = function(id){
+  const e=ALL_ENTRIES.find(x=>x._id===id);
+  if(!e) return;
+  const sel=document.getElementById('em-sku');
+  sel.innerHTML=getAllSkus().map(s=>`<option value="${s.sku}" ${s.sku===e.sku?'selected':''}>${s.sku}</option>`).join('');
+  document.getElementById('em-id').value=id;
+  document.getElementById('em-stage').value=e.stage||'';
+  document.getElementById('em-qty').value=e.qty||0;
+  document.getElementById('em-wt').value=e.weight||0;
+  document.getElementById('em-date').value=e.date||'';
+  document.getElementById('em-challan').value=e.challan||'';
+  document.getElementById('em-vendor').value=e.vendor||'';
+  document.getElementById('em-sentby').value=e.sentby||'';
+  const m=document.getElementById('edit-modal');
+  m.style.display='flex';
+  m.onclick=ev=>{if(ev.target===m)closeEditModal();};
+};
+window.closeEditModal=()=>document.getElementById('edit-modal').style.display='none';
+window.saveEdit = async function(){
+  const id=document.getElementById('em-id').value;
+  const btn=document.getElementById('em-savebtn');
+  btn.disabled=true;btn.textContent='Saving...';
+  try{
+    await updateDoc(doc(db,'entries',id),{
+      sku:document.getElementById('em-sku').value,
+      stage:document.getElementById('em-stage').value,
+      qty:Number(document.getElementById('em-qty').value)||0,
+      weight:Number(document.getElementById('em-wt').value)||0,
+      date:document.getElementById('em-date').value,
+      challan:document.getElementById('em-challan').value,
+      vendor:document.getElementById('em-vendor').value,
+      sentby:document.getElementById('em-sentby').value
+    });
+    closeEditModal();
+    btn.disabled=false;btn.textContent='✓ Update Karo';
+    showToast('Entry update ho gayi ✓','tok');
+  }catch(err){
+    btn.disabled=false;btn.textContent='✓ Update Karo';
+    showToast('Error: '+err.message,'terr');
+  }
+};
+
+// ── REPORT ──
+window.setWeek=function(offset){
+  const now=new Date(); const day=now.getDay(); const mon=new Date(now);
+  mon.setDate(now.getDate()-day+1+offset*7);
+  const sun=new Date(mon); sun.setDate(mon.getDate()+6);
+  const fmt=d=>d.toISOString().split('T')[0];
+  document.getElementById('rep-from').value=fmt(mon);
+  document.getElementById('rep-to').value=fmt(sun);
+  renderReport();
+};
+window.renderReport=function(){
+  const from=document.getElementById('rep-from').value;
+  const to=document.getElementById('rep-to').value;
+  if(!from||!to){document.getElementById('rep-out').innerHTML='<div class="empty">Date chunno</div>';return;}
+  const entries=ALL_ENTRIES.filter(e=>!e._autoCreated&&e.date>=from&&e.date<=to);
+  const plat=entries.filter(e=>e.stage==='Plating-Sent');
+  const chain=entries.filter(e=>e.stage.startsWith('Chain-Sent'));
+  const reset=entries.filter(e=>e.stage.startsWith('Resetting-Sent'));
+  const sumQty=arr=>arr.reduce((a,e)=>a+(Number(e.qty)||0),0);
+  const sumWt=arr=>arr.reduce((a,e)=>a+(Number(e.weight)||0),0);
+  document.getElementById('rep-out').innerHTML=`
+    <div class="fcard">
+      <div class="ftitle">Summary</div>
+      <div class="drow"><span style="color:var(--pur);font-weight:600">Plating Bheja</span><span class="mono fw6" style="color:var(--pur)">${sumQty(plat)} pcs · ${sumWt(plat)}g</span></div>
+      <div class="drow"><span style="color:var(--tel);font-weight:600">Chain Bheja</span><span class="mono fw6" style="color:var(--tel)">${sumQty(chain)} pcs</span></div>
+      <div class="drow"><span style="color:var(--amb);font-weight:600">Resetting Bheja</span><span class="mono fw6" style="color:var(--amb)">${sumQty(reset)} pcs</span></div>
+      <div class="drow"><span style="font-weight:600">Total</span><span class="mono fw6" style="color:var(--gold)">${sumQty([...plat,...chain,...reset])} pcs</span></div>
+    </div>`;
+};
+window.renderTally=function(){
+  const date=document.getElementById('tally-date').value;
+  const vendor=(document.getElementById('tally-vendor').value||'').toLowerCase();
+  if(!date){document.getElementById('tally-out').innerHTML='';return;}
+  const stages=['Plating-Sent','Chain-Sent-Factory','Resetting-Sent-Factory'];
+  const entries=ALL_ENTRIES.filter(e=>!e._autoCreated&&e.date===date&&stages.includes(e.stage)&&(!vendor||(e.pendantVendor||'').toLowerCase().includes(vendor)));
+  if(!entries.length){document.getElementById('tally-out').innerHTML='<div class="empty">Koi entry nahi is date/vendor ke liye</div>';return;}
+  const byStage={};
+  entries.forEach(e=>{
+    if(!byStage[e.stage]) byStage[e.stage]={total:0,skus:{}};
+    byStage[e.stage].total+=Number(e.qty)||0;
+    byStage[e.stage].skus[e.sku]=(byStage[e.stage].skus[e.sku]||0)+(Number(e.qty)||0);
+  });
+  let html='<div class="fcard"><div class="ftitle">Factory Bill Tally — '+date+'</div>';
+  Object.entries(byStage).forEach(([stage,data])=>{
+    html+=`<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;color:var(--mut2);margin-bottom:6px">${stage}</div>`;
+    Object.entries(data.skus).forEach(([sku,qty])=>{
+      html+=`<div class="drow"><span class="mono" style="color:var(--gold)">${sku}</span><span class="mono fw6">${qty} pcs</span></div>`;
+    });
+    html+=`<div style="font-size:11px;color:var(--mut2);margin-top:4px">Total: ${data.total} pcs</div></div>`;
+  });
+  html+='</div>';
+  document.getElementById('tally-out').innerHTML=html;
+};
+
+// ── BILL UPLOAD ──
+let _billFileData=null, _billFileType=null;
+window.onBillFile=function(event){
+  const file=event.target.files[0];
+  if(!file) return;
+  document.getElementById('bill-fname').textContent='✓ '+file.name;
+  document.getElementById('bill-drop-area').style.borderColor='var(--gold)';
+  document.getElementById('analyze-btn').style.display='block';
+  const reader=new FileReader();
+  reader.onload=e=>{
+    _billFileData=e.target.result.split(',')[1];
+    _billFileType=file.type;
+  };
+  reader.readAsDataURL(file);
+};
+
+window.analyzeBill=async function(){
+  const apiKey=document.getElementById('api-key-input').value||localStorage.getItem('ornaza_api_key')||'';
+  if(!apiKey){showToast('API key daalo pehle','terr');return;}
+  if(!_billFileData){showToast('Bill upload karo pehle','terr');return;}
+  const btn=document.getElementById('analyze-btn');
+  btn.textContent='🤖 Reading...';btn.disabled=true;
+  try{
+    const isImg=_billFileType&&_billFileType.startsWith('image/');
+    const mediaType=isImg?_billFileType:'application/pdf';
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:2000,
+        messages:[{role:'user',content:[
+          {type:isImg?'image':'document',source:{type:'base64',media_type:mediaType,data:_billFileData}},
+          {type:'text',text:`This is a vendor invoice image. For each table row:
+1. "desc": copy the full Description cell text INCLUDING any handwritten text you see written in pen next to the printed text
+2. "sku": extract ONLY the handwritten code (pattern: HMS-XXX or HMC-XXX where XXX is 2-3 digits). If none visible, use "?"
+3. "qty": number from Qty column
+4. "rate": number from Rate column  
+5. "amount": number from Amount column (exactly as printed)
+
+The handwritten codes look like: HMS-227, HMS-202, HMS-243, HMS-117, HMS-129 etc.
+They are written in pen/pencil directly on the bill paper next to each description row.
+
+Return ONLY valid JSON, no markdown:
+{"items":[{"desc":"MANGALSUTRA CHAIN - SADI HMS-227","sku":"HMS-227","qty":99,"rate":15,"amount":1485}]}`}
+        ]}]
+      })
+    });
+    const data=await resp.json();
+    const text=data.content?.[0]?.text||'';
+    if(!text){showToast('AI se koi response nahi aaya — dobara try karo','terr');btn.textContent='🤖 AI se Bill Read Karwao';btn.disabled=false;return;}
+    // Try to extract JSON from response
+    let clean=text.replace(/```json|```/g,'').trim();
+    // Find JSON object in response
+    const jsonMatch=clean.match(/\{[\s\S]*\}/);
+    if(jsonMatch) clean=jsonMatch[0];
+    let parsed;
+    try{ parsed=JSON.parse(clean); }
+    catch(e){
+      // Try to fix truncated JSON
+      const lastBrace=clean.lastIndexOf('}');
+      if(lastBrace>0){
+        try{ parsed=JSON.parse(clean.substring(0,lastBrace+1)); }
+        catch(e2){ showToast('AI response parse nahi hua — dobara try karo','terr');btn.textContent='🤖 AI se Bill Read Karwao';btn.disabled=false;return; }
+      } else {
+        showToast('AI response invalid — dobara try karo','terr');btn.textContent='🤖 AI se Bill Read Karwao';btn.disabled=false;return;
+      }
+    }
+    let billItems=parsed.items||[];
+    // Auto-extract SKU from description if not found
+    billItems=billItems.map(item=>{
+      if(!item.sku || item.sku==='?'){
+        // Try to find HMS-XXX or HMC-XXX pattern in description
+        const match=(item.desc||item.description||'').match(/H[MC]S?[-\s]?(\d{2,3})/i);
+        if(match) item.sku='HMS-'+match[1];
+      }
+      return item;
+    });
+    // Apply SKU mappings
+    billItems=billItems.map(item=>{
+      const mapped=SKU_MAPPINGS[item.sku];
+      return mapped?{...item,factorySku:item.sku,sku:mapped.yourSku}:item;
+    });
+    // Merge duplicate SKUs
+    const mergedMap={};
+    billItems.forEach(item=>{
+      const key=item.sku;
+      if(!mergedMap[key]) mergedMap[key]={...item,qty:0,amount:0};
+      mergedMap[key].qty+=Number(item.qty)||0;
+      mergedMap[key].amount+=Number(item.amount)||0;
+      if(item.factorySku&&!mergedMap[key].factorySku) mergedMap[key].factorySku=item.factorySku;
+    });
+    billItems=Object.values(mergedMap);
+    showBillResult(billItems);
+    btn.textContent='🤖 AI se Bill Read Karwao';btn.disabled=false;
+  }catch(err){
+    btn.textContent='🤖 AI se Bill Read Karwao';btn.disabled=false;
+    showToast('Error: '+err.message,'terr');
+  }
+};
+
+function showBillResult(billItems){
+  const date=document.getElementById('bill-date').value;
+  const vendor=document.getElementById('bill-vendor').value||'';
+  const fmtDate=date?new Date(date+' ').toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}):date;
+  // Get app data for this date/vendor
+  const appEntries=ALL_ENTRIES.filter(e=>{
+    if(!e.date===date) return false;
+    if(date&&e.date!==date) return false;
+    if(vendor&&!(e.pendantVendor||'').toLowerCase().includes(vendor.toLowerCase())) return false;
+    return ['Plating-Sent','Chain-Sent-Factory','Resetting-Sent-Factory'].includes(e.stage);
+  });
+  const appMap={};
+  appEntries.forEach(e=>{ appMap[e.sku]=(appMap[e.sku]||0)+(Number(e.qty)||0); });
+
+  const rows=billItems.map(item=>{
+    const appQty=appMap[item.sku]||0;
+    const diff=appQty-item.qty;
+    const rate=item.rate||item.amount/item.qty||0;
+    const diffAmt=diff*rate;
+    return {...item,appQty,diff,rate,diffAmt};
+  });
+
+  // Extra in app
+  const billSkus=new Set(billItems.map(i=>i.sku));
+  const extraInApp=Object.entries(appMap).filter(([sku])=>!billSkus.has(sku));
+
+  const totalBill=rows.reduce((a,r)=>a+r.qty,0);
+  const totalApp=rows.reduce((a,r)=>a+r.appQty,0)+extraInApp.reduce((a,[,q])=>a+q,0);
+  const totalDiff=totalApp-totalBill;
+  const totalBillAmt=rows.reduce((a,r)=>a+(r.amount||r.qty*r.rate||0),0);
+  const totalDiffAmt=rows.reduce((a,r)=>a+r.diffAmt,0);
+  const matchCount=rows.filter(r=>r.diff===0).length;
+  const mismatchCount=rows.filter(r=>r.diff!==0).length+extraInApp.length;
+
+  document.getElementById('bill-result').innerHTML=`
+    <div id="bill-print-area" style="background:var(--sur);border-radius:12px;padding:16px;margin-top:12px;border:1px solid var(--brd)">
+      <div style="border-bottom:2px solid var(--gold);padding-bottom:10px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:flex-end">
+        <div><div style="font-family:var(--display);font-size:16px;font-weight:700;color:var(--gold)">ORNAZA JEWELS</div>
+          <div style="font-size:11px;color:var(--mut2);margin-top:2px">Bill Verification Report</div></div>
+        <div style="text-align:right;font-size:10px;color:var(--mut2)"><div>${fmtDate}</div><div>${vendor||'—'}</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:6px;margin-bottom:12px;text-align:center">
+        ${[['Bill Qty',totalBill,'var(--pur)'],['App Qty',totalApp,'var(--tel)'],['Qty Diff',totalDiff===0?'0 ✓':totalDiff,totalDiff===0?'var(--grn)':'var(--red)'],['Bill Amt','₹'+Math.round(totalBillAmt).toLocaleString('en-IN'),'var(--gold)'],['Amt Diff',totalDiffAmt===0?'₹0 ✓':(totalDiffAmt>0?'+':'')+' ₹'+Math.round(Math.abs(totalDiffAmt)).toLocaleString('en-IN'),totalDiffAmt===0?'var(--grn)':totalDiffAmt>0?'var(--grn)':'var(--red)']].map(([lbl,val,clr])=>`
+        <div style="background:var(--sur2);border-radius:8px;padding:8px 4px">
+          <div style="font-size:9px;color:var(--mut2);text-transform:uppercase;margin-bottom:3px">${lbl}</div>
+          <div class="mono fw6" style="color:${clr};font-size:13px">${val}</div>
+        </div>`).join('')}
+      </div>
+      <div style="font-size:11px;margin-bottom:8px"><span style="color:var(--grn)">✓ ${matchCount} match</span>${mismatchCount>0?` &nbsp;|&nbsp; <span style="color:var(--red)">⚠ ${mismatchCount} mismatch</span>`:''}</div>
+      <div style="background:var(--sur2);border-radius:8px;overflow:hidden;margin-bottom:12px">
+        <div style="display:grid;grid-template-columns:1.2fr auto auto auto auto auto auto;padding:6px 10px;font-size:9px;color:var(--mut2);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--brd)">
+          <span>SKU</span><span style="padding:0 8px">Rate</span><span style="padding:0 8px">Bill</span><span style="padding:0 8px">App</span><span style="padding:0 8px">Diff</span><span style="padding:0 8px">Diff Amt</span><span style="padding:0 8px">Status</span>
+        </div>
+        ${rows.map(r=>`<div style="display:grid;grid-template-columns:1.2fr auto auto auto auto auto auto;padding:8px 10px;border-bottom:1px solid var(--brd);align-items:center">
+          <span><span class="mono fw6" style="color:var(--gold)">${r.sku}</span>${r.factorySku?`<span style="font-size:9px;color:var(--mut);margin-left:4px">(${r.factorySku})</span>`:''}</span>
+          <span class="mono" style="padding:0 8px;color:var(--mut2)">₹${r.rate||'—'}</span>
+          <span class="mono" style="padding:0 8px;color:var(--pur)">${r.qty}</span>
+          <span class="mono" style="padding:0 8px;color:${r.appQty>0?'var(--tel)':'var(--mut)'}">${r.appQty||'—'}</span>
+          <span class="mono fw6" style="padding:0 8px;color:${r.diff===0?'var(--mut)':r.diff>0?'var(--grn)':'var(--red)'}">${r.diff===0?'—':r.diff>0?'+'+r.diff:r.diff}</span>
+          <span class="mono fw6" style="padding:0 8px;color:${r.diffAmt===0?'var(--mut)':r.diffAmt>0?'var(--grn)':'var(--red)'}">${r.diffAmt===0?'—':(r.diffAmt>0?'+':'')+' ₹'+Math.round(Math.abs(r.diffAmt)).toLocaleString('en-IN')}</span>
+          <span style="padding:0 8px">${r.diff===0?'<span style="color:var(--grn)">✓</span>':'<span style="color:var(--red)">⚠</span>'}</span>
+        </div>`).join('')}
+        ${extraInApp.map(([sku,qty])=>`<div style="display:grid;grid-template-columns:1.2fr auto auto auto auto auto auto;padding:8px 10px;border-bottom:1px solid var(--brd);align-items:center">
+          <span class="mono fw6" style="color:var(--amb)">${sku}<span style="font-size:9px;color:var(--mut);margin-left:4px">(App only)</span></span>
+          <span style="padding:0 8px">—</span><span style="padding:0 8px">—</span>
+          <span class="mono" style="padding:0 8px;color:var(--amb)">${qty}</span>
+          <span class="mono fw6" style="padding:0 8px;color:var(--amb)">+${qty}</span>
+          <span style="padding:0 8px">—</span><span style="padding:0 8px;color:var(--amb)">⚠</span>
+        </div>`).join('')}
+        <div style="display:grid;grid-template-columns:1.2fr auto auto auto auto auto auto;padding:9px 10px;background:var(--sur3)">
+          <span style="font-size:11px;font-weight:600">TOTAL</span>
+          <span style="padding:0 8px"></span>
+          <span class="mono fw6" style="padding:0 8px;color:var(--pur)">${totalBill}</span>
+          <span class="mono fw6" style="padding:0 8px;color:var(--tel)">${totalApp}</span>
+          <span class="mono fw6" style="padding:0 8px;color:${totalDiff===0?'var(--grn)':'var(--red)'}">${totalDiff===0?'0':totalDiff}</span>
+          <span class="mono fw6" style="padding:0 8px;color:${totalDiffAmt===0?'var(--grn)':totalDiffAmt>0?'var(--grn)':'var(--red)'}">${totalDiffAmt===0?'₹0':(totalDiffAmt>0?'+':'')+' ₹'+Math.round(Math.abs(totalDiffAmt)).toLocaleString('en-IN')}</span>
+          <span style="padding:0 8px"></span>
+        </div>
+      </div>
+      <div style="background:${totalDiff===0?'var(--grbg)':'var(--rbg)'};border:1px solid ${totalDiff===0?'var(--grbrd)':'var(--rbrd)'};border-radius:8px;padding:10px 12px">
+        <div style="font-size:12px;font-weight:600;color:${totalDiff===0?'var(--grn)':'var(--red)'}">
+          ${totalDiff===0?'✓ Bill aur App data match karta hai':'⚠ '+Math.abs(totalDiff)+' pcs difference hai — check karo. Amt diff: ₹'+Math.round(Math.abs(totalDiffAmt)).toLocaleString('en-IN')}
+        </div>
+      </div>
+    </div>
+    <button onclick="printBillResult()" style="width:100%;padding:12px;background:var(--gold);color:#0a0a08;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;margin-top:10px">🖨 Professional PDF Download</button>`;
+}
+window.printBillResult=function(){
+  const area=document.getElementById('bill-print-area');
+  if(!area) return;
+  const w=window.open('','_blank');
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Ornaza — Bill Report</title><style>body{font-family:Arial,sans-serif;background:#fff;color:#111;padding:20px;margin:0}.mono{font-family:monospace}.fw6{font-weight:600}div{box-sizing:border-box}</style></head><body>'+area.innerHTML+'</body></html>');
+  w.document.close(); w.focus(); setTimeout(()=>w.print(),500);
+};
+
+// ── CHAIN BILL TALLY ──
+
+// Smart SKU parser — HMS-216 221, hms 104 207, 216 221
+function cbParseSku(text){
+  const results=[];
+  const lines=text.trim().split('\n').filter(l=>l.trim());
+  lines.forEach(line=>{
+    line=line.trim().replace(/:/g,' ');
+    const skuMatch=line.match(/HMS[-\s]?(\d{3,4})/i);
+    if(!skuMatch) return;
+    const sku='HMS-'+skuMatch[1];
+    const nums=line.match(/\d+/g)||[];
+    // last number is qty (skip the SKU number itself)
+    const skuNum=skuMatch[1];
+    const qtyCandidates=nums.filter(n=>n!==skuNum);
+    const qty=parseInt(qtyCandidates[qtyCandidates.length-1])||0;
+    if(qty>0) results.push({sku,qty});
+  });
+  return results;
+}
+
+// Add vendor row
+window.cbAddVendorRow=function(item={}){
+  const tbody=document.getElementById('cb-vendor-rows');
+  const idx=tbody.children.length+1;
+  const tr=document.createElement('tr');
+  tr.style.borderBottom='1px solid var(--brd)';
+  tr.dataset.rate=item.rate||0;
+  tr.innerHTML=`
+    <td style="padding:4px 8px;color:var(--mut2);font-size:10px">${idx}</td>
+    <td style="padding:4px 4px"><input value="${item.desc||''}" placeholder="Description" style="width:100%;background:transparent;border:none;border-bottom:1px solid var(--brd2);color:var(--txt);font-size:11px;padding:2px 4px;outline:none"></td>
+    <td style="padding:4px 4px;white-space:nowrap">
+      <span style="color:var(--gold);font-size:11px;font-weight:700;font-family:var(--mono)">HMS-</span><input value="${(item.sku||'').replace('HMS-','')}" placeholder="???" inputmode="numeric" style="width:40px;background:transparent;border:none;border-bottom:1px solid var(--gold);color:var(--gold);font-size:11px;font-weight:700;text-align:center;outline:none;font-family:var(--mono)" class="cb-sku-inp" onkeydown="if(event.key==='Enter'){event.preventDefault();const all=document.querySelectorAll('.cb-sku-inp');const idx=Array.from(all).indexOf(this);if(idx<all.length-1)all[idx+1].focus();}">
+    </td>
+    <td style="padding:4px 4px"><input value="${item.qty||''}" placeholder="0" inputmode="numeric" style="width:55px;background:transparent;border:none;border-bottom:1px solid var(--brd2);color:var(--gold);font-size:12px;font-weight:600;text-align:center;outline:none" class="cb-qty-inp"></td>
+    <td style="padding:4px 4px"><input value="${item.rate||''}" placeholder="0" inputmode="numeric" style="width:55px;background:transparent;border:none;border-bottom:1px solid var(--brd2);color:var(--tel);font-size:12px;text-align:center;outline:none" class="cb-rate-inp"></td>
+    <td style="padding:4px 8px;text-align:right;color:var(--mut2);font-size:11px" class="cb-row-amt">${item.qty&&item.rate?'₹'+(item.qty*item.rate).toLocaleString('en-IN'):'—'}</td>
+    <td style="padding:4px 4px"><button onclick="this.closest('tr').remove()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:12px">✕</button></td>`;
+  const inputs=tr.querySelectorAll('input');
+  const updateAmt=()=>{
+    const q=parseFloat(inputs[1].value)||0;
+    const r=parseFloat(inputs[2].value)||0;
+    tr.dataset.rate=r;
+    tr.querySelector('.cb-row-amt').textContent=q&&r?'₹'+(q*r).toLocaleString('en-IN'):'—';
+  };
+  [inputs[1],inputs[2]].forEach(inp=>inp.addEventListener('input',updateAmt));
+  tbody.appendChild(tr);
+};
+
+function cbGetVendorItems(){
+  const rows=document.querySelectorAll('#cb-vendor-rows tr');
+  const items=[];
+  rows.forEach((tr,i)=>{
+    const inputs=tr.querySelectorAll('input');
+    const desc=(inputs[0]?.value||'').trim();
+    const skuNum=(inputs[1]?.value||'').trim();
+    const sku=skuNum?'HMS-'+skuNum:'?';
+    const qty=parseFloat(inputs[2]?.value)||0;
+    const rate=parseFloat(inputs[3]?.value)||0;
+    if(desc&&qty>0) items.push({idx:i+1,desc,sku,qty,rate,amount:qty*rate});
+  });
+  return items;
+}
+
+// AI Bill Extraction
+window.cbExtractBill=async function(input){
+  const file=input.files[0];
+  if(!file) return;
+  const apiKey=localStorage.getItem('ornaza_api_key')||'';
+  if(!apiKey){showToast('Settings mein API key daalo pehle','terr');return;}
+
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=document.getElementById('cb-img-preview');
+    img.src=e.target.result;img.style.display='block';
+  };
+  reader.readAsDataURL(file);
+
+  const status=document.getElementById('cb-extract-status');
+  status.style.display='block';status.style.color='var(--gold)';
+  status.textContent='🤖 AI bill padh raha hai...';
+
+  const b64=await new Promise(res=>{
+    const r=new FileReader();
+    r.onload=e=>res(e.target.result.split(',')[1]);
+    r.readAsDataURL(file);
+  });
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:4000,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:file.type,data:b64}},
+          {type:'text',text:'Extract this vendor invoice/bill image. Return ONLY valid JSON with no markdown, no explanation, no extra text. JSON format: {"vendor":"","bill_no":"","date":"YYYY-MM-DD","total_pcs":0,"grand_total":0,"gst_pct":3,"items":[{"desc":"","qty":0,"rate":0,"amount":0}]}. Extract ALL line items from the table. If date format is DD-MM-YYYY convert to YYYY-MM-DD. Start your response with { and end with }'}
+        ]}]
+      })
+    });
+    const data=await resp.json();
+    if(data.error){showToast('API Error: '+data.error.message,'terr');status.style.display='none';return;}
+    const txt=data.content?.[0]?.text||'';
+    if(!txt){showToast('AI se response nahi aaya — dobara try karo','terr');status.style.display='none';return;}
+    // Try multiple JSON extraction strategies
+    let jsonTxt=txt.replace(/```json|```/g,'').trim();
+    let json=null;
+    // Strategy 1: direct parse
+    try{ json=JSON.parse(jsonTxt); } catch(e){}
+    // Strategy 2: extract {...} block
+    if(!json){ const m=jsonTxt.match(/\{[\s\S]*\}/); if(m){ try{ json=JSON.parse(m[0]); }catch(e){} } }
+    // Strategy 3: find first { to last }
+    if(!json){ const s=jsonTxt.indexOf('{'); const e=jsonTxt.lastIndexOf('}'); if(s>=0&&e>s){ try{ json=JSON.parse(jsonTxt.substring(s,e+1)); }catch(ex){} } }
+    if(!json){ showToast('Chain bill parse error — please retry','terr'); status.style.display='none'; return; }
+
+    if(json.vendor) document.getElementById('cb-vendor').value=json.vendor;
+    if(json.date) document.getElementById('cb-date').value=json.date;
+    if(json.bill_no) document.getElementById('cb-bill-no').value=json.bill_no;
+    if(json.total_pcs) document.getElementById('cb-total-pcs').value=json.total_pcs;
+    if(json.grand_total) document.getElementById('cb-bill-amt').value=json.grand_total;
+    if(json.gst_pct){
+      const sel=document.getElementById('cb-gst');
+      [...sel.options].forEach(o=>{if(parseFloat(o.value)===json.gst_pct)o.selected=true;});
+    }
+    document.getElementById('cb-vendor-rows').innerHTML='';
+    (json.items||[]).forEach(item=>cbAddVendorRow({desc:item.desc,qty:item.qty,rate:item.rate}));
+
+    status.textContent='✅ Bill extract ho gaya! Step 4 mein apne SKU paste karo.';
+    status.style.color='var(--grn)';
+    showToast('Bill extract ho gaya!','tok');
+  }catch(err){
+    status.textContent='❌ Error: '+err.message;
+    status.style.color='var(--red)';
+    showToast('AI error: '+err.message,'terr');
+  }
+};
+
+window.calcChainBill=function(){
+  const vendor=document.getElementById('cb-vendor').value||'Chain Vendor';
+  const date=document.getElementById('cb-date').value||'';
+  const billNo=document.getElementById('cb-bill-no')?.value||'';
+  const billTotalPcs=Number(document.getElementById('cb-total-pcs').value)||0;
+  const billGrandTotal=Number(document.getElementById('cb-bill-amt').value)||0;
+  const gstPct=Number(document.getElementById('cb-gst').value)||3;
+
+  const vendorItems=cbGetVendorItems();
+  if(!vendorItems.length){
+    // Try to get from rendered tally rows if table exists
+    showToast('Vendor bill items daalo ya bill upload karo','terr');return;
+  }
+
+  // Parse apni SKU+qty from textarea
+  const pasteText=document.getElementById('cb-paste')?.value||'';
+  const apniList=cbParseSku(pasteText);
+
+  // Get prices for vendor
+  const vendorL=vendor.toLowerCase();
+  const vPrices={};
+  CHAIN_PRICES_ALL.forEach(p=>{if((p.vendor||'').toLowerCase()===vendorL) vPrices[p.sku]=p.price;});
+  const prices=Object.keys(vPrices).length>0?vPrices:CHAIN_PRICES;
+
+  // Build apni items list by SKU (support multiple rows with same SKU)
+  const apniBySkuList={};
+  apniList.forEach(a=>{
+    const apniRate=prices[a.sku]||0;
+    if(!apniBySkuList[a.sku]) apniBySkuList[a.sku]=[];
+    apniBySkuList[a.sku].push({sku:a.sku,qty:a.qty,rate:apniRate,used:false});
+  });
+
+  // Match vendor items to apni items BY SKU — multiple rows with same SKU matched in order
+  const vendorMatched={};
+  vendorItems.forEach((vi,i)=>{
+    const sku=vi.sku&&vi.sku!=='?'?vi.sku:null;
+    if(sku && apniBySkuList[sku]){
+      const available=apniBySkuList[sku].filter(a=>!a.used);
+      if(available.length>0){
+        // Match closest qty first
+        let best=available[0];
+        let bestDiff=Math.abs(available[0].qty-vi.qty);
+        available.forEach(a=>{
+          const diff=Math.abs(a.qty-vi.qty);
+          if(diff<bestDiff){bestDiff=diff;best=a;}
+        });
+        best.used=true;
+        vendorMatched[i]=best;
+      } else {
+        vendorMatched[i]=null;
+      }
+    } else {
+      vendorMatched[i]=null;
+    }
+  });
+
+  const rateCounters={};
+  const fmtDate=date?new Date(date+' ').toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}):date;
+  const circle=(n,color)=>`<span style="display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;border-radius:50%;border:1.5px solid ${color};color:${color};font-size:9px;font-weight:700;padding:0 2px">${n>0?'+'+n:n}</span>`;
+
+  let tallyRows='';
+  let apniTotalPcs=0, apniTotalAmt=0, vendorTotalPcs=0, vendorTotalAmt=0;
+
+  vendorItems.forEach((vi,vIdx)=>{
+    const apniItem=vendorMatched[vIdx]||null;
+
+    const rowSku=vi.sku&&vi.sku!=='?'?vi.sku:'';
+    const sku=rowSku||(apniItem?apniItem.sku:'?');
+    const apniQty=apniItem?apniItem.qty:0;
+    const apniRate=apniItem?apniItem.rate:vi.rate;
+    const apniAmt=apniQty*apniRate;
+    const vendorAmt=vi.amount;
+    const rateDiff=apniQty>0?Math.round((apniRate-vi.rate)*100)/100:0;
+    const hasRateDiff=rateDiff!==0&&apniQty>0;
+
+    vendorTotalPcs+=vi.qty; vendorTotalAmt+=vendorAmt;
+    apniTotalPcs+=apniQty; apniTotalAmt+=apniAmt;
+
+    const qtyDiff=apniQty-vi.qty;
+    const hasQtyDiff=qtyDiff!==0&&apniQty>0;
+    const hasAmtDiff=Math.round(Math.abs(apniAmt-vendorAmt))>0&&apniQty>0;
+    const rowBg=hasQtyDiff||hasAmtDiff?'background:rgba(217,95,75,0.08)':'';
+
+    tallyRows+=`<tr style="border-bottom:1px solid var(--brd);${rowBg}">
+      <td style="padding:6px 8px;font-size:11px;color:var(--txt)">${vi.desc}</td>
+      <td style="padding:4px 6px;text-align:center">
+        <input value="${sku}" data-idx="${vi.idx}" style="width:72px;background:${sku!=='?'?'transparent':'rgba(217,95,75,0.15)'};border:none;border-bottom:1px solid ${sku!=='?'?'var(--gold)':'var(--red)'};color:${sku!=='?'?'var(--gold)':'var(--red)'};font-size:11px;font-weight:700;text-align:center;outline:none;font-family:var(--mono)" class="tally-sku-inp" placeholder="HMS-?">
+      </td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;font-weight:600;color:var(--pur)">${vi.qty}</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;font-weight:600;color:var(--tel)">${apniQty||'—'}</td>
+      <td style="padding:6px 4px;text-align:center">${apniQty>0?(hasQtyDiff?circle(qtyDiff,qtyDiff>0?'var(--grn)':'var(--red)'):'<span style="color:var(--grn)">✓</span>'):'—'}</td>
+      <td style="padding:6px 8px;text-align:center;font-size:11px;color:var(--mut2)">₹${vi.rate}</td>
+      <td style="padding:6px 8px;text-align:center;font-size:11px;color:var(--mut2)">${apniQty>0?'₹'+apniRate:'—'}</td>
+      <td style="padding:6px 4px;text-align:center">${apniQty>0&&hasRateDiff?circle(rateDiff,rateDiff>0?'var(--grn)':'var(--red)'):'—'}</td>
+      <td style="padding:6px 8px;text-align:right;font-size:11px">₹${vendorAmt.toLocaleString('en-IN')}</td>
+      <td style="padding:6px 8px;text-align:right;font-size:11px">${apniAmt?'₹'+Math.round(apniAmt).toLocaleString('en-IN'):'—'}</td>
+      <td style="padding:6px 4px;text-align:center">${apniQty>0?(hasAmtDiff?circle(Math.round(apniAmt-vendorAmt),apniAmt>vendorAmt?'var(--grn)':'var(--red)'):'<span style="color:var(--grn)">✓</span>'):'—'}</td>
+    </tr>`;
+  });
+
+  const vendorGst=Math.round(vendorTotalAmt*gstPct/100);
+  const apniGst=Math.round(apniTotalAmt*gstPct/100);
+  const apniGrandTotal=apniTotalAmt+apniGst;
+  const vendorGrandTotal=vendorTotalAmt+vendorGst;
+  const amtDiffTotal=apniGrandTotal-vendorGrandTotal;
+  const pcsDiff=apniTotalPcs-vendorTotalPcs;
+
+  document.getElementById('cb-result').innerHTML=`
+    <div id="cb-print-area" style="background:var(--sur);border-radius:12px;padding:16px;margin-top:12px;border:1px solid var(--brd)">
+      <div style="border-bottom:2px solid var(--gold);padding-bottom:10px;margin-bottom:14px">
+        <div style="font-family:var(--display);font-size:16px;font-weight:700;color:var(--gold)">ORNAZA JEWELS</div>
+        <div style="font-size:10px;color:var(--mut2);margin-top:2px">Chain Bill Tally · ${fmtDate}${billNo?' · Bill #'+billNo:''} · ${vendor}</div>
+      </div>
+      <div style="overflow-x:auto;margin-bottom:14px">
+        <table style="width:100%;border-collapse:collapse;font-size:11px;min-width:550px">
+          <thead><tr style="background:var(--sur3)">
+            <th style="padding:7px 8px;text-align:left;color:var(--mut2);font-size:9px">DESCRIPTION</th>
+            <th style="padding:7px 8px;text-align:center;color:var(--gold);font-size:9px">SKU</th>
+            <th style="padding:7px 8px;text-align:center;color:var(--pur);font-size:9px">QTY VENDOR</th>
+            <th style="padding:7px 8px;text-align:center;color:var(--tel);font-size:9px">QTY APNA</th>
+            <th style="padding:7px 4px;text-align:center;color:var(--mut2);font-size:9px">±</th>
+            <th style="padding:7px 8px;text-align:center;color:var(--mut2);font-size:9px">VENDOR RATE</th>
+            <th style="padding:7px 8px;text-align:center;color:var(--mut2);font-size:9px">APNA RATE</th>
+            <th style="padding:7px 4px;text-align:center;color:var(--mut2);font-size:9px">RATE ±</th>
+            <th style="padding:7px 8px;text-align:right;color:var(--pur);font-size:9px">AMT VENDOR</th>
+            <th style="padding:7px 8px;text-align:right;color:var(--tel);font-size:9px">AMT APNA</th>
+            <th style="padding:7px 4px;text-align:center;color:var(--mut2);font-size:9px">±</th>
+          </tr></thead>
+          <tbody>${tallyRows}</tbody>
+          <tfoot>
+            <tr style="border-top:1px solid var(--brd)">
+              <td colspan="6" style="padding:6px 8px;font-size:11px;color:var(--mut2)">Sub Total</td>
+              <td></td>
+              <td style="padding:6px 8px;text-align:right;font-size:11px;color:var(--mut2)">₹${vendorTotalAmt.toLocaleString('en-IN')}</td>
+              <td style="padding:6px 8px;text-align:right;font-size:11px;color:var(--mut2)">₹${apniTotalAmt.toLocaleString('en-IN')}</td>
+              <td></td>
+            </tr>
+            <tr style="border-top:1px solid var(--brd)">
+              <td colspan="6" style="padding:6px 8px;font-size:11px;color:var(--mut2)">GST ${gstPct}%</td>
+              <td></td>
+              <td style="padding:6px 8px;text-align:right;font-size:11px;color:var(--mut2)">₹${vendorGst.toLocaleString('en-IN')}</td>
+              <td style="padding:6px 8px;text-align:right;font-size:11px;color:var(--mut2)">₹${apniGst.toLocaleString('en-IN')}</td>
+              <td></td>
+            </tr>
+            <tr style="background:var(--sur3);border-top:2px solid var(--brd)">
+              <td colspan="3" style="padding:8px;font-size:12px;font-weight:700">GRAND TOTAL</td>
+              <td style="padding:8px;text-align:center;font-weight:700;color:var(--pur)">${vendorTotalPcs}</td>
+              <td style="padding:8px;text-align:center;font-weight:700;color:var(--tel)">${apniTotalPcs}</td>
+              <td style="padding:8px;text-align:center">${pcsDiff!==0?circle(pcsDiff,pcsDiff>0?'var(--grn)':'var(--red)'):'<span style="color:var(--grn)">✓</span>'}</td>
+              <td></td>
+              <td style="padding:8px;text-align:right;font-weight:700;color:var(--pur)">₹${(vendorTotalAmt+vendorGst).toLocaleString('en-IN')}</td>
+              <td style="padding:8px;text-align:right;font-weight:700;color:var(--tel)">₹${apniGrandTotal.toLocaleString('en-IN')}</td>
+              <td style="padding:8px;text-align:center">${Math.round(Math.abs(amtDiffTotal))>1?circle(Math.round(amtDiffTotal),amtDiffTotal>0?'var(--grn)':'var(--red)'):'<span style="color:var(--grn)">✓</span>'}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:var(--sur2);border-radius:8px;padding:10px">
+          <div style="font-size:9px;color:var(--mut2);text-transform:uppercase;margin-bottom:6px">Pieces</div>
+          <div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--mut2)">Vendor:</span><span class="mono fw6" style="color:var(--pur)">${vendorTotalPcs}</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-top:3px"><span style="color:var(--mut2)">Apna:</span><span class="mono fw6" style="color:var(--tel)">${apniTotalPcs}</span></div>
+          <div style="border-top:1px solid var(--brd);margin-top:6px;padding-top:6px;display:flex;justify-content:space-between">
+            <span style="font-size:11px;font-weight:600">Diff:</span>
+            <span class="mono fw6" style="color:${pcsDiff===0?'var(--grn)':'var(--red)'}">${pcsDiff===0?'✓ Same':(pcsDiff>0?'+':'')+pcsDiff}</span>
+          </div>
+        </div>
+        <div style="background:var(--sur2);border-radius:8px;padding:10px">
+          <div style="font-size:9px;color:var(--mut2);text-transform:uppercase;margin-bottom:6px">Amount</div>
+          <div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--mut2)">Vendor:</span><span class="mono fw6" style="color:var(--pur)">₹${vendorGrandTotal.toLocaleString('en-IN')}</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-top:3px"><span style="color:var(--mut2)">App:</span><span class="mono fw6" style="color:var(--tel)">₹${apniGrandTotal.toLocaleString('en-IN')}</span></div>
+          <div style="border-top:1px solid var(--brd);margin-top:6px;padding-top:6px;display:flex;justify-content:space-between">
+            <span style="font-size:11px;font-weight:600">Diff:</span>
+            <span class="mono fw6" style="color:${Math.round(Math.abs(amtDiffTotal))<2?'var(--grn)':'var(--red)'}">
+              ${Math.round(Math.abs(amtDiffTotal))<2?'✓ Match':'₹'+Math.abs(Math.round(amtDiffTotal)).toLocaleString('en-IN')+' '+(amtDiffTotal>0?'(App zyada)':'(Bill zyada)')}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+      <button onclick="printChainBill()" style="padding:12px;background:var(--sur2);border:1px solid var(--brd2);border-radius:10px;color:var(--txt);font-size:13px;font-weight:600;cursor:pointer">🖨 PDF Save</button>
+      <button onclick="cbSaveChainEntry()" style="padding:12px;background:var(--gold);border:none;border-radius:10px;color:#0a0a08;font-size:13px;font-weight:700;cursor:pointer">✅ Chain-Received Entry</button>
+    </div>`;
+};
+
+window.printChainBill=function(){
+  const area=document.getElementById('cb-print-area');
+  if(!area) return;
+  const vendor=document.getElementById('cb-vendor').value||'Chain Vendor';
+  const w=window.open('','_blank');
+  // Replace color vars with B&W equivalents, keep circles bold black
+  let html=area.innerHTML
+    .replace(/var\(--gold\)/g,'#111').replace(/var\(--pur\)/g,'#111')
+    .replace(/var\(--tel\)/g,'#111').replace(/var\(--red\)/g,'#111')
+    .replace(/var\(--grn\)/g,'#111').replace(/var\(--mut2\)/g,'#555')
+    .replace(/var\(--txt\)/g,'#111').replace(/var\(--brd\)/g,'#bbb')
+    .replace(/var\(--sur[23]?\)/g,'#f5f5f5').replace(/var\(--[\w-]+\)/g,'#999')
+    // Highlight diff rows background
+    .replace(/background:rgba\(217,95,75,0\.08\)/g,'background:#f0f0f0');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Chain Tally — ${vendor}</title><style>
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{font-family:Arial,sans-serif;background:#fff;color:#111;padding:16px;margin:0;font-size:11px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:5px 7px;border:1px solid #bbb}
+    th{background:#e8e8e8;font-size:9px;font-weight:700;text-transform:uppercase;color:#111}
+    /* Difference circles — bold black, bigger */
+    span[style*="border-radius:50%"]{
+      border-color:#111 !important;
+      color:#111 !important;
+      font-size:11px !important;
+      font-weight:900 !important;
+      min-width:26px !important;
+      height:26px !important;
+    }
+    /* Diff rows — light grey background */
+    tr[style*="background:#f0f0f0"]{background:#e8e8e8 !important}
+    /* Grand total row */
+    tfoot tr:last-child td{font-weight:700;border-top:2px solid #111}
+    @media print{button{display:none}.no-print{display:none}}
+  </style></head><body>`+html+`</body></html>`);
+  w.document.close();w.focus();setTimeout(()=>w.print(),600);
+};
+
+window.cbSaveChainEntry=async function(){
+  try{
+    const vendor=document.getElementById('cb-vendor').value||'Vendor';
+    const date=document.getElementById('cb-date').value||new Date().toISOString().slice(0,10);
+    
+    // Get items from tally result - look for SKU inputs in tally table
+    const skuInputs=document.querySelectorAll('.tally-sku-inp');
+    const tallyRows=document.querySelectorAll('#cb-print-area tbody tr');
+    
+    if(!skuInputs.length && !tallyRows.length){
+      showToast('Pehle Tally Karo dabao','terr');return;
+    }
+
+    // Build items from tally table
+    const items=[];
+    tallyRows.forEach(tr=>{
+      const tds=tr.querySelectorAll('td');
+      if(!tds.length) return;
+      const skuInp=tr.querySelector('.tally-sku-inp');
+      const sku=skuInp?skuInp.value.trim():'';
+      if(!sku||sku==='?') return;
+      // qty is apna received qty (index 4)
+      const qty=parseInt(tds[4]?.textContent)||0;
+      const rate=parseFloat(tds[6]?.textContent?.replace('₹',''))||0;
+      if(qty>0) items.push({sku,qty,rate});
+    });
+
+    if(!items.length){
+      showToast('Koi valid SKU nahi mila tally mein','terr');return;
+    }
+
+    // Get next challan number
+    const snap=await getDocs(collection(db,'entries'));
+    const challanNums=snap.docs
+      .map(d=>d.data().challan)
+      .filter(c=>c&&typeof c==='string'&&c.startsWith('C-'))
+      .map(c=>parseInt(c.replace('C-',''))||0);
+    const nextNum=challanNums.length?Math.max(...challanNums)+1:1;
+    const challan='C-'+String(nextNum).padStart(3,'0');
+
+    for(const item of items){
+      await addDoc(collection(db,'entries'),{
+        sku:item.sku,
+        qty:item.qty,
+        stage:'Chain-Received',
+        challan:challan,
+        vendor:vendor,
+        date:date,
+        rate:item.rate||0,
+        sentby:'',
+        weight:0,
+        ts:Date.now()
+      });
+    }
+    showToast('✓ '+challan+' — '+items.length+' SKU save ho gaye','tok');
+  }catch(err){
+    showToast('Error: '+err.message,'terr');
+    console.error('cbSaveChainEntry error:',err);
+  }
+};
+
+// ── CHAIN PRICES ──
+const PRICE_PWD_KEY='ornaza_price_pwd';
+window.CHAIN_VENDORS=JSON.parse(localStorage.getItem('ornaza_chain_vendors')||'["Ankitbhai"]');
+
+window.unlockPrices=function(){
+  const input=document.getElementById('price-pwd-inp').value;
+  const saved=localStorage.getItem(PRICE_PWD_KEY)||'1234';
+  if(input===saved){
+    document.getElementById('price-lock').style.display='none';
+    document.getElementById('price-section').style.display='block';
+    renderVendorTabs();
+    document.getElementById('price-pwd-inp').value='';
+  } else {
+    showToast('Galat password!','terr');
+    document.getElementById('price-pwd-inp').value='';
+  }
+};
+window.lockPrices=function(){
+  document.getElementById('price-lock').style.display='block';
+  document.getElementById('price-section').style.display='none';
+};
+window.changePwd=function(){
+  const np=document.getElementById('new-pwd').value;
+  const cp=document.getElementById('confirm-pwd').value;
+  if(!np){showToast('Password khali nahi ho sakta','terr');return;}
+  if(np!==cp){showToast('Dono password match nahi karte','terr');return;}
+  localStorage.setItem(PRICE_PWD_KEY,np);
+  document.getElementById('new-pwd').value='';document.getElementById('confirm-pwd').value='';
+  showToast('Password update ho gaya ✓','tok');
+};
+
+function renderVendorTabs(){
+  const vtabs=document.getElementById('vendor-tabs');
+  if(!vtabs) return;
+  const vendors=window.CHAIN_VENDORS||[];
+  vtabs.innerHTML=vendors.map(v=>`
+    <div style="display:flex;align-items:center;gap:2px;background:${v===_activeVendor?'var(--gbg)':'var(--sur2)'};border:1px solid ${v===_activeVendor?'var(--gold)':'var(--brd2)'};border-radius:20px;overflow:hidden">
+      <button onclick="selectVendor('${v}')" style="padding:6px 12px;border:none;background:transparent;font-size:11px;font-weight:600;cursor:pointer;color:${v===_activeVendor?'var(--gold)':'var(--mut2)'}">${v}</button>
+      <button onclick="editVendor('${v}')" style="padding:4px 6px;border:none;background:transparent;font-size:10px;cursor:pointer;color:var(--mut2)">✏</button>
+      <button onclick="deleteVendor('${v}')" style="padding:4px 6px;border:none;background:transparent;font-size:10px;cursor:pointer;color:var(--red)">✕</button>
+    </div>`).join('');
+}
+window.showAddVendor=function(){
+  document.getElementById('add-vendor-box').style.display='block';
+  document.getElementById('new-vendor-name').focus();
+};
+window.addVendor=function(){
+  const name=(document.getElementById('new-vendor-name').value||'').trim();
+  if(!name){showToast('Vendor naam likho','terr');return;}
+  if(!window.CHAIN_VENDORS.includes(name)){
+    window.CHAIN_VENDORS.push(name);
+    localStorage.setItem('ornaza_chain_vendors',JSON.stringify(window.CHAIN_VENDORS));
+  }
+  document.getElementById('new-vendor-name').value='';
+  document.getElementById('add-vendor-box').style.display='none';
+  renderVendorTabs(); selectVendor(name);
+  showToast(name+' add ho gaya ✓','tok');
+};
+window.editVendor=function(oldName){
+  const newName=prompt('Vendor ka naya naam:',oldName);
+  if(!newName||newName.trim()===oldName) return;
+  const n=newName.trim();
+  const idx=window.CHAIN_VENDORS.indexOf(oldName);
+  if(idx>-1) window.CHAIN_VENDORS[idx]=n;
+  localStorage.setItem('ornaza_chain_vendors',JSON.stringify(window.CHAIN_VENDORS));
+  const updates=(CHAIN_PRICES_ALL||[]).filter(p=>p.vendor===oldName);
+  Promise.all(updates.map(p=>updateDoc(doc(db,'chain_prices',p.id),{vendor:n})))
+    .then(()=>showToast(oldName+' → '+n+' update ho gaya ✓','tok'));
+  if(_activeVendor===oldName) _activeVendor=n;
+  renderVendorTabs();
+};
+window.deleteVendor=function(name){
+  if(!confirm(name+' vendor delete karo? Iske saare prices bhi delete honge!')) return;
+  window.CHAIN_VENDORS=window.CHAIN_VENDORS.filter(v=>v!==name);
+  localStorage.setItem('ornaza_chain_vendors',JSON.stringify(window.CHAIN_VENDORS));
+  const toDel=(CHAIN_PRICES_ALL||[]).filter(p=>p.vendor===name);
+  Promise.all(toDel.map(p=>deleteDoc(doc(db,'chain_prices',p.id)))).then(()=>showToast(name+' delete ho gaya','tok'));
+  if(_activeVendor===name){_activeVendor=null;document.getElementById('vendor-price-section').style.display='none';}
+  renderVendorTabs();
+};
+window.selectVendor=function(v){
+  _activeVendor=v;
+  document.getElementById('cp-vendor').value=v;
+  document.getElementById('sel-vendor-lbl').textContent=v;
+  document.getElementById('vendor-price-section').style.display='block';
+  document.getElementById('cp-edit-box').style.display='none';
+  setTimeout(()=>{
+    const sel=document.getElementById('cp-sku-sel');
+    if(sel){
+      const allSkus=getAllSkus().sort((a,b)=>a.sku.localeCompare(b.sku,undefined,{numeric:true}));
+      sel.innerHTML='<option value="">-- SKU chunno --</option>'+allSkus.map(s=>`<option value="${s.sku}">${s.sku}</option>`).join('');
+    }
+  },50);
+  renderVendorPrices(v); renderVendorTabs();
+};
+function renderVendorPrices(vendor){
+  const el=document.getElementById('chain-price-list');
+  if(!el) return;
+  const filtered=(CHAIN_PRICES_ALL||[]).filter(p=>(p.vendor||'Ankitbhai')===vendor).sort((a,b)=>a.sku.localeCompare(b.sku,undefined,{numeric:true}));
+  if(!filtered.length){el.innerHTML=`<div style="font-size:11px;color:var(--mut);padding:8px 0">${vendor} ka koi price nahi — neeche add karo</div>`;return;}
+  el.innerHTML=filtered.map(p=>`<div class="drow">
+    <div><span class="mono fw6" style="color:var(--gold)">${p.sku}</span><span style="color:var(--mut);margin:0 6px">→</span><span class="mono fw6" style="color:var(--grn)">₹${p.price}</span></div>
+    <div style="display:flex;gap:6px">
+      <button onclick="openEditPrice('${p.id}','${p.sku}',${p.price})" style="background:var(--abg);border:1px solid var(--abrd);color:var(--amb);border-radius:6px;padding:3px 8px;font-size:10px;font-family:var(--sans);cursor:pointer">Edit</button>
+      <button onclick="delChainPrice('${p.id}')" style="background:var(--rbg);border:1px solid var(--rbrd);color:var(--red);border-radius:6px;padding:3px 8px;font-size:10px;font-family:var(--sans);cursor:pointer">Del</button>
+    </div>
+  </div>`).join('');
+}
+window.openEditPrice=function(id,sku,price){
+  document.getElementById('cp-edit-id').value=id;
+  document.getElementById('cp-edit-sku').value=sku;
+  document.getElementById('cp-edit-price').value=price;
+  document.getElementById('cp-edit-box').style.display='block';
+  document.getElementById('cp-edit-price').focus();
+};
+window.saveEditPrice=async function(){
+  const id=document.getElementById('cp-edit-id').value;
+  const price=Number(document.getElementById('cp-edit-price').value)||0;
+  if(!price){showToast('Price daalo','terr');return;}
+  try{await updateDoc(doc(db,'chain_prices',id),{price});document.getElementById('cp-edit-box').style.display='none';showToast('Price update ho gaya ✓','tok');}
+  catch(err){showToast('Error: '+err.message,'terr');}
+};
+window.addChainPrice=async function(){
+  const sku=document.getElementById('cp-sku-sel').value||document.getElementById('cp-sku-inp').value.trim().toUpperCase();
+  const price=Number(document.getElementById('cp-price').value)||0;
+  const vendor=(document.getElementById('cp-vendor').value||'Ankitbhai').trim();
+  if(!sku||!price){showToast('SKU aur Price dono bharo','terr');return;}
+  try{
+    const old=await getDocs(query(collection(db,'chain_prices'),where('sku','==',sku),where('vendor','==',vendor)));
+    old.forEach(d=>deleteDoc(d.ref));
+    await addDoc(collection(db,'chain_prices'),{sku,price,vendor});
+    document.getElementById('cp-price').value='';
+    showToast(sku+' — ₹'+price+' ('+vendor+') save ho gaya ✓','tok');
+  }catch(err){showToast('Error: '+err.message,'terr');}
+};
+window.delChainPrice=async function(id){
+  if(!confirm('Price delete karo?')) return;
+  await deleteDoc(doc(db,'chain_prices',id));
+  showToast('Price delete ho gaya','tok');
+};
+
+// ── SKU MAPPING ──
+function renderSkuMapList(){
+  const el=document.getElementById('sku-map-list');
+  if(!el) return;
+  const mappings=Object.entries(SKU_MAPPINGS);
+  if(!mappings.length){el.innerHTML='<div style="font-size:11px;color:var(--mut);padding:4px 0">Koi mapping nahi abhi</div>';return;}
+  el.innerHTML=mappings.sort((a,b)=>a[0].localeCompare(b[0],undefined,{numeric:true})).map(([fSku,{yourSku,id}])=>`<div class="drow">
+    <div><span class="mono fw6" style="color:var(--mut2)">${fSku}</span><span style="color:var(--mut);margin:0 6px">→</span><span class="mono fw6" style="color:var(--gold)">${yourSku}</span></div>
+    <button onclick="delSkuMapping('${id}')" style="background:var(--rbg);border:1px solid var(--rbrd);color:var(--red);border-radius:6px;padding:3px 8px;font-size:10px;font-family:var(--sans);cursor:pointer">Del</button>
+  </div>`).join('');
+}
+window.addSkuMapping=async function(){
+  const fSku=(document.getElementById('map-fsku').value||'').trim().toUpperCase();
+  const ySku=(document.getElementById('map-ysku').value||'').trim().toUpperCase();
+  if(!fSku||!ySku){showToast('Dono SKU bharo','terr');return;}
+  try{
+    await addDoc(collection(db,'sku_mappings'),{factorySku:fSku,yourSku:ySku});
+    document.getElementById('map-fsku').value='';document.getElementById('map-ysku').value='';
+    showToast(fSku+' → '+ySku+' mapping add ho gayi ✓','tok');
+  }catch(err){showToast('Error: '+err.message,'terr');}
+};
+window.delSkuMapping=async function(id){
+  if(!confirm('Mapping delete karo?')) return;
+  await deleteDoc(doc(db,'sku_mappings',id));
+  showToast('Mapping delete ho gayi','tok');
+};
+
+// ── CUSTOM SKU ──
+function renderCustomSkuList(){
+  const el=document.getElementById('custom-sku-list');
+  if(!el) return;
+  if(!CUSTOM_SKUS.length){el.innerHTML='<div style="font-size:11px;color:var(--mut);padding:4px 0">Koi custom SKU nahi</div>';return;}
+  el.innerHTML=CUSTOM_SKUS.sort((a,b)=>a.sku.localeCompare(b.sku,undefined,{numeric:true})).map(c=>`<div class="drow">
+    <div><span class="mono fw6" style="color:var(--gold)">${c.sku}</span><span class="badge ${c.category==='BESTSELLING'?'bg-gold':c.category==='GOOD'?'bg-grn':'bg-pur'}" style="margin-left:8px;font-size:8px">${c.category}</span></div>
+    <button onclick="delCustomSku('${c.id}','${c.sku}')" style="background:var(--rbg);border:1px solid var(--rbrd);color:var(--red);border-radius:6px;padding:3px 8px;font-size:10px;font-family:var(--sans);cursor:pointer">Del</button>
+  </div>`).join('');
+}
+window.addCustomSku=async function(){
+  const code=(document.getElementById('new-sku-code').value||'').trim().toUpperCase();
+  const cat=document.getElementById('new-sku-cat').value;
+  if(!code){showToast('SKU code likho','terr');return;}
+  if(getAllSkus().find(s=>s.sku===code)){showToast('Yeh SKU pehle se hai!','terr');return;}
+  const btn=document.getElementById('add-sku-btn');
+  btn.disabled=true;btn.textContent='Adding...';
+  addDoc(collection(db,'custom_skus'),{sku:code,category:cat,addedOn:new Date().toISOString()})
+    .then(()=>{document.getElementById('new-sku-code').value='';btn.disabled=false;btn.textContent='+ SKU Add Karo';showToast(code+' add ho gaya!','tok');})
+    .catch(err=>{btn.disabled=false;btn.textContent='+ SKU Add Karo';showToast('Error: '+err.message,'terr');});
+};
+window.delCustomSku=async function(id,sku){
+  if(!confirm(sku+' delete karo?')) return;
+  await deleteDoc(doc(db,'custom_skus',id));
+  showToast(sku+' delete ho gaya','tok');
+};
+
+// ── TOAST ──
+// ── CHALLAN DISPATCH ──
+
+function buildDispatchSection(allIds, chDispatched, chDispatchDate, chTotalSkus, chTotalQty){
+  const safeKey = JSON.stringify(allIds);
+  const bg  = chDispatchDate ? 'var(--grbg)' : 'var(--sur2)';
+  const brd = chDispatchDate ? 'var(--grbrd)' : 'var(--brd)';
+  const clr = chDispatchDate ? 'var(--grn)' : 'var(--mut2)';
+  let html = '<div style="margin-top:8px">';
+  html += '<div style="background:var(--sur2);border-radius:8px;padding:8px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--brd)">';
+  html += '<span style="font-size:11px;color:var(--mut2)">'+chTotalSkus+' SKU &nbsp;|&nbsp; '+chTotalQty+' pcs total</span>';
+  html += '<span style="font-size:10px;font-weight:600;color:'+clr+'">'+(chDispatchDate?'&#10003; Dispatched':'Pending')+'</span>';
+  html += '</div>';
+  html += '<div style="background:'+bg+';border-radius:8px;padding:10px;border:1px solid '+brd+';display:flex;align-items:center;gap:10px">';
+  html += '<span style="font-size:11px;color:var(--mut2);white-space:nowrap;flex-shrink:0">Dispatch Date:</span>';
+  html += '<input type="date" value="'+(chDispatchDate||'')+'" onchange="saveDispatchDate(this.value,'+safeKey+')" style="flex:1;background:var(--sur);border:1px solid var(--brd2);border-radius:6px;padding:6px 10px;color:var(--txt);font-size:13px;font-family:var(--sans);outline:none">';
+  html += '</div></div>';
+  return html;
+}
+
+window.saveDispatchDate = async function(date, ids){
+  try{
+    const dispatched = !!date;
+    await Promise.all(ids.map(id=>updateDoc(doc(db,'entries',id),{_challanDispatched:dispatched,_dispatchDate:date})));
+    ids.forEach(id=>{
+      const e=ALL_ENTRIES.find(x=>x._id===id);
+      if(e){e._challanDispatched=dispatched;e._dispatchDate=date;}
+    });
+    showToast(date?'✓ Dispatch date save ho gayi':'Date clear ho gayi','tok');
+    renderHist();
+  }catch(err){showToast('Error: '+err.message,'terr');}
+};
+
+
+// ── SHOPIFY STOCK SYNC ──
+window.SHOPIFY_STOCK = JSON.parse(localStorage.getItem('ornaza_shopify_stock')||'{}');
+
+const SHOPIFY_WORKER_URL = 'https://quiet-snow-ded0.ornazajewels.workers.dev';
+
+window.syncShopifyStock = async function(){
+  const statusEl = document.getElementById('shopify-sync-status');
+  statusEl.textContent = '🔄 Shopify se stock fetch ho raha hai...';
+  statusEl.style.color = 'var(--amb)';
+  try{
+    const resp = await fetch(SHOPIFY_WORKER_URL);
+    if(!resp.ok) throw new Error('HTTP '+resp.status);
+    const data = await resp.json();
+    if(data.error) throw new Error(data.error);
+    window.SHOPIFY_STOCK = data.stock||{};
+    window.SHOPIFY_DAYS = data.daysLeft||{};
+    window.SHOPIFY_SALES = data.sales||{};
+    localStorage.setItem('ornaza_shopify_stock', JSON.stringify(window.SHOPIFY_STOCK));
+    localStorage.setItem('ornaza_shopify_days', JSON.stringify(window.SHOPIFY_DAYS));
+    localStorage.setItem('ornaza_shopify_sync_time', new Date().toLocaleTimeString('en-IN'));
+    const count = Object.keys(window.SHOPIFY_STOCK).length;
+    const now = new Date().toLocaleTimeString('en-IN');
+    statusEl.textContent = '✓ '+count+' SKUs synced — '+now;
+    statusEl.style.color = 'var(--grn)';
+    showToast('✓ Stock sync ho gaya — '+count+' SKUs','tok');
+    renderDash();
+  }catch(err){
+    statusEl.textContent = 'Error: '+err.message;
+    statusEl.style.color = 'var(--red)';
+    showToast('Error: '+err.message,'terr');
+  }
+};
+
+// ── CHALLAN PDF ──
+window._challans = {};
+window.downloadChallanPDF = function(key){
+  const ch = window._challans[key];
+  if(!ch) return;
+  
+  const date = ch.date || '';
+  const vendor = ch.vendor || '';
+  const pendant = ch.pendantVendor || '';
+  const sentby = ch.sentby || '';
+  const challanNo = ch.challan || '';
+  // Get stage from first SKU entry
+  const stage = (ch.skus && ch.skus[0] && ch.skus[0].stage) || ch.stage || '';
+  
+  // Show photo only for Chain-Sent-Pendant stage
+  const showPhoto = stage === 'Chain-Sent-Pendant';
+  
+  // Build SKU photo map from ALL_SKUS (ashraful_skus collection)
+  const skuPhotoMap = {};
+  if(showPhoto){
+    if(window.ALL_SKUS) window.ALL_SKUS.forEach(s=>{ if(s.photoURL) skuPhotoMap[s.code||s.sku] = s.photoURL; });
+    if(window.EXTRA_SKUS) window.EXTRA_SKUS.forEach(s=>{ if(s.photoURL) skuPhotoMap[s.code||s.sku] = s.photoURL; });
+  }
+  
+  // Sort SKUs ascending
+  const skus = [...ch.skus].sort((a,b)=>a.sku.localeCompare(b.sku,undefined,{numeric:true}));
+  const totalQty = skus.reduce((s,e)=>s+(Number(e.qty)||0),0);
+  // For Chain-Sent-Pendant: calculate actual chain total
+  const chainTotal = stage === 'Chain-Sent-Pendant' ? skus.reduce((s,e)=>{
+    const r=SKU_RATIOS[(e.sku||'').toUpperCase()];
+    return s+(r&&r.ratio>1?Math.floor((Number(e.qty)||0)/r.ratio):(Number(e.qty)||0));
+  },0) : totalQty;
+  
+  const rows = skus.map((e,i)=>{
+    const photo = showPhoto ? (skuPhotoMap[e.sku]||'') : '';
+    // SKU ratio - chain qty calculation
+    const ratioData = SKU_RATIOS[(e.sku||'').toUpperCase()];
+    const chainQty = ratioData && ratioData.ratio > 1 ? Math.floor((Number(e.qty)||0) / ratioData.ratio) : null;
+    const chainLabel = chainQty !== null ? `<span style="color:#e53935;font-weight:700;font-size:12px;margin-left:6px">(${chainQty} = chain)</span>` : '';
+    return `
+    <tr>
+      <td style="text-align:center;color:#888;font-size:12px;width:30px">${i+1}</td>
+      ${showPhoto ? `<td style="padding:4px 2px"><img src="${photo}" onerror="this.style.display='none'" style="width:50px;height:50px;object-fit:cover;border-radius:6px;display:block"></td><td style="text-align:center;font-weight:900;font-size:18px;color:#C9952A;padding:0 4px;width:50px">${e.qty}</td>` : `<td style="text-align:center;font-weight:900;font-size:18px;color:#C9952A;padding:0 4px;width:50px">${e.qty}</td>`}
+      <td style="font-weight:700;font-size:13px;padding-left:12px">${e.sku}${chainLabel}</td>
+    </tr>`;
+  }).join('');
+  
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Challan ${challanNo} — ${date}</title>
+<style>
+  body{font-family:Arial,sans-serif;padding:20px;color:#000;max-width:600px;margin:0 auto}
+  .header{text-align:center;margin-bottom:20px;border-bottom:2px solid #C9952A;padding-bottom:10px}
+  .title{font-size:22px;font-weight:bold;color:#C9952A}
+  .subtitle{font-size:12px;color:#666}
+  .info{display:flex;justify-content:space-between;margin-bottom:15px;font-size:13px}
+  .info-box{background:#f5f5f5;padding:10px;border-radius:6px;flex:1;margin:0 5px}
+  .info-label{font-size:10px;color:#888;text-transform:uppercase}
+  .info-val{font-weight:bold;font-size:14px}
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  th{background:#C9952A;color:#fff;padding:8px;text-align:left;font-size:12px}
+  td{padding:7px 8px;border-bottom:1px solid #eee;font-size:13px}
+  tr:nth-child(even){background:#fafafa}
+  .total{font-weight:bold;background:#fff3cd !important}
+  .footer{margin-top:20px;text-align:center;font-size:11px;color:#999;border-top:1px solid #eee;padding-top:10px}
+  @media print{body{padding:5px}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="title">ORNAZA JEWELS</div>
+  <div class="subtitle">${showPhoto ? "Pendant Sent for Chain Fitting" : "Production Challan"}</div>
+</div>
+<div class="info">
+  <div class="info-box">
+    <div class="info-label">Date</div>
+    <div class="info-val">${date}</div>
+  </div>
+  <div class="info-box">
+    <div class="info-label">Challan No</div>
+    <div class="info-val">${challanNo||'—'}</div>
+  </div>
+  <div class="info-box">
+    <div class="info-label">Vendor</div>
+    <div class="info-val">${vendor||'—'}</div>
+  </div>
+</div>
+<div class="info">
+  <div class="info-box">
+    <div class="info-label">Factory</div>
+    <div class="info-val">${pendant||'—'}</div>
+  </div>
+  <div class="info-box">
+    <div class="info-label">Sent By</div>
+    <div class="info-val">${sentby||'—'}</div>
+  </div>
+  <div class="info-box">
+    <div class="info-label">Total Pieces</div>
+    <div class="info-val" style="color:#C9952A">${totalQty} pcs</div>
+  </div>
+</div>
+<table>
+  <thead><tr><th style="width:30px">#</th>${showPhoto?'<th style="width:60px">Photo</th><th style="width:50px;text-align:center">Qty</th>':'<th style=\"width:50px;text-align:center\">Qty</th>'}<th>SKU</th></tr></thead>
+  <tbody>
+    ${rows}
+    <tr class="total">
+      <td colspan="2"><b>TOTAL</b></td>
+      <td><b>${totalQty} pcs</b></td>
+    </tr>
+  </tbody>
+</table>
+<div class="footer">Ornaza Jewels — Generated on ${new Date().toLocaleDateString('en-IN')}</div>
+</body>
+</html>`;
+
+  const win = window.open('','_blank');
+  win.document.write(html);
+  win.document.close();
+  setTimeout(()=>win.print(), 500);
+};
+
+// ── PENDANT MAPPING ──
+let PENDANT_MAPPINGS = {}; // {productSku: pendantSku}
+let PENDANT_MAPPING_DOCS = {}; // {productSku: docId}
+
+// Load from Firebase
+onSnapshot(collection(db,'pendant_mappings'), snap=>{
+  PENDANT_MAPPINGS = {};
+  PENDANT_MAPPING_DOCS = {};
+  snap.forEach(d=>{
+    const data = d.data();
+    PENDANT_MAPPINGS[data.productSku] = data.pendantSku;
+    PENDANT_MAPPING_DOCS[data.productSku] = d.id;
+  });
+  renderPendantMappingList();
+});
+
+function getPendantSkuFor(productSku){
+  return PENDANT_MAPPINGS[productSku] || productSku;
+}
+
+window.renderPendantMappingList = function(){
+  const list = document.getElementById('pm-list');
+  if(!list) return;
+  const q = (document.getElementById('pm-search')||{}).value||'';
+  const keys = Object.keys(PENDANT_MAPPINGS);
+  if(!keys.length){
+    list.innerHTML = '<div class="empty">Koi mapping nahi — upar se add karo</div>';
+    return;
+  }
+  // Group by pendant SKU
+  const groups = {};
+  keys.forEach(prod=>{
+    const pend = PENDANT_MAPPINGS[prod];
+    if(!groups[pend]) groups[pend] = [];
+    groups[pend].push(prod);
+  });
+  // Filter by search
+  const filtered = {};
+  Object.keys(groups).forEach(pend=>{
+    if(!q || pend.toLowerCase().includes(q.toLowerCase()) || groups[pend].some(p=>p.toLowerCase().includes(q.toLowerCase()))){
+      filtered[pend] = groups[pend];
+    }
+  });
+  if(!Object.keys(filtered).length){
+    list.innerHTML = '<div class="empty">Koi result nahi</div>';
+    return;
+  }
+  list.innerHTML = Object.keys(filtered).sort().map(pend=>`
+    <div class="fcard" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:9px;background:#9C27B020;border:1px solid #9C27B040;color:#9C27B0;padding:2px 7px;border-radius:4px;font-weight:700">PENDANT</span>
+          <span class="mono fw6" style="color:#9C27B0;font-size:15px">${pend}</span>
+          <span style="font-size:10px;color:var(--mut2)">${filtered[pend].length} SKU</span>
+        </div>
+      </div>
+      <div style="border-left:2px solid #9C27B040;padding-left:12px">
+        ${filtered[pend].sort().map(prod=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--brd)">
+            <span class="mono" style="color:var(--gold);font-size:13px">${prod}</span>
+            <button onclick="deletePendantMapping('${prod}')" style="background:var(--rbg);border:1px solid var(--rbrd);color:var(--red);border-radius:6px;padding:2px 8px;font-size:10px;cursor:pointer">Del</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+};
+
+// Chain Price SKU search
+window.cpSkuSearch = function(q){
+  const drop = document.getElementById('cp-sku-drop');
+  if(!q){drop.classList.remove('open');return;}
+  const matches = getAllSkus().filter(s=>s.sku.toLowerCase().includes(q.toLowerCase())).slice(0,8);
+  if(!matches.length){drop.classList.remove('open');return;}
+  drop.innerHTML = matches.map(s=>`<div class="sku-opt" onmousedown="cpSkuSelect('${s.sku}')">${s.sku}</div>`).join('');
+  drop.classList.add('open');
+};
+window.cpSkuSelect = function(sku){
+  document.getElementById('cp-sku-inp').value = sku;
+  document.getElementById('cp-sku-sel').value = sku;
+  document.getElementById('cp-sku-drop').classList.remove('open');
+  setTimeout(()=>document.getElementById('cp-price').focus(),50);
+};
+window.cpSkuEnter = function(e){
+  if(e.key==='Enter'){
+    e.preventDefault();
+    const first = document.getElementById('cp-sku-drop').querySelector('.sku-opt');
+    if(first) first.dispatchEvent(new MouseEvent('mousedown'));
+  }
+};
+document.addEventListener('click', e=>{
+  if(!e.target.closest('#cp-sku-inp') && !e.target.closest('#cp-sku-drop'))
+    document.getElementById('cp-sku-drop')?.classList.remove('open');
+});
+
+// Pendant Mapping SKU search
+window.pmSkuSearch = function(type, q){
+  const dropId = type==='pendant' ? 'pm-pendant-drop' : 'pm-product-drop';
+  const drop = document.getElementById(dropId);
+  if(!q){drop.classList.remove('open');return;}
+  const matches = getAllSkus().filter(s=>s.sku.toLowerCase().includes(q.toLowerCase())).slice(0,8);
+  if(!matches.length){drop.classList.remove('open');return;}
+  drop.innerHTML = matches.map(s=>`<div class="sku-opt" onmousedown="pmSkuSelect('${type}','${s.sku}')">${s.sku}</div>`).join('');
+  drop.classList.add('open');
+};
+window.pmSkuSelect = function(type, sku){
+  if(type==='pendant'){
+    document.getElementById('pm-pendant-inp').value = sku;
+    document.getElementById('pm-pendant-sku').value = sku;
+    document.getElementById('pm-pendant-drop').classList.remove('open');
+    setTimeout(()=>document.getElementById('pm-product-inp').focus(),50);
+  } else {
+    document.getElementById('pm-product-inp').value = sku;
+    document.getElementById('pm-product-sku').value = sku;
+    document.getElementById('pm-product-drop').classList.remove('open');
+  }
+};
+window.pmSkuEnter = function(e, type){
+  if(e.key==='Enter'){
+    e.preventDefault();
+    const dropId = type==='pendant' ? 'pm-pendant-drop' : 'pm-product-drop';
+    const first = document.getElementById(dropId).querySelector('.sku-opt');
+    if(first) first.dispatchEvent(new MouseEvent('mousedown'));
+    else if(type==='product') addPendantMapping();
+  }
+};
+
+window.addPendantMapping = async function(){
+  const pendSku = document.getElementById('pm-pendant-sku').value||document.getElementById('pm-pendant-inp').value.trim().toUpperCase();
+  const prodSku = document.getElementById('pm-product-sku').value||document.getElementById('pm-product-inp').value.trim().toUpperCase();
+  if(!pendSku||!prodSku){showToast('Dono SKU select karo','terr');return;}
+  if(pendSku===prodSku){showToast('Same SKU select nahi kar sakte','terr');return;}
+  try{
+    if(PENDANT_MAPPING_DOCS[prodSku]){
+      await updateDoc(doc(db,'pendant_mappings',PENDANT_MAPPING_DOCS[prodSku]),{pendantSku:pendSku,productSku:prodSku});
+    } else {
+      await addDoc(collection(db,'pendant_mappings'),{pendantSku:pendSku,productSku:prodSku});
+    }
+    showToast('✓ Mapping add ho gayi','tok');
+  }catch(e){showToast('Error: '+e.message,'terr');}
+};
+
+window.deletePendantMapping = async function(prodSku){
+  try{
+    if(PENDANT_MAPPING_DOCS[prodSku]){
+      await deleteDoc(doc(db,'pendant_mappings',PENDANT_MAPPING_DOCS[prodSku]));
+    }
+    showToast('Mapping delete ho gayi','tok');
+  }catch(e){showToast('Error: '+e.message,'terr');}
+};
+
+window.populatePendantDropdowns = function(){
+  const skus = getAllSkus().map(s=>s.sku).sort();
+  const pendSel = document.getElementById('pm-pendant-sku');
+  const prodSel = document.getElementById('pm-product-sku');
+  if(!pendSel||!prodSel) return;
+  const opts = skus.map(s=>`<option value="${s}">${s}</option>`).join('');
+  pendSel.innerHTML = '<option value="">-- Pendant SKU --</option>' + opts;
+  prodSel.innerHTML = '<option value="">-- Product SKU --</option>' + opts;
+};
+
+function showToast(msg,cls){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show'+(cls?' '+cls:'');
+  clearTimeout(window._toastT);
+  window._toastT=setTimeout(()=>t.className='toast',2800);
+}
+window.showToast=showToast;
+
+// ── INIT ──
+window.addEventListener('load',()=>{
+  if('serviceWorker' in navigator) {
+    const sw = `
+      self.addEventListener('install', e => self.skipWaiting());
+      self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+    `;
+    const blob = new Blob([sw], {type:'application/javascript'});
+    const url = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(url).catch(()=>{});
+  }
+  
+  // PWA Install
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', e=>{
+    e.preventDefault();
+    deferredPrompt = e;
+    const btn = document.getElementById('install-btn');
+    if(btn) btn.style.display='block';
+  });
+  window.installApp = function(){
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(()=>{
+      deferredPrompt=null;
+      const btn=document.getElementById('install-btn');
+      if(btn) btn.style.display='none';
+    });
+  };
+  window.addEventListener('appinstalled',()=>{
+    const btn=document.getElementById('install-btn');
+    if(btn) btn.style.display='none';
+    deferredPrompt=null;
+  });
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('e-date').value=today;
+  document.getElementById('api-key-input').value=localStorage.getItem('ornaza_api_key')||'';
+  // Load Shopify token
+  const st=document.getElementById('shopify-token');
+  if(st) st.value=localStorage.getItem('ornaza_shopify_token')||'';
+  const sck=document.getElementById('shopify-claude-key');
+  if(sck) sck.value=localStorage.getItem('ornaza_api_key')||'';
+  // Load saved stock
+  window.SHOPIFY_STOCK=JSON.parse(localStorage.getItem('ornaza_shopify_stock')||'{}');
+  window.SHOPIFY_DAYS=JSON.parse(localStorage.getItem('ornaza_shopify_days')||'{}');
+  addSkuRow(); updateChallan();
+  document.getElementById('rep-from').value=today;
+  document.getElementById('rep-to').value=today;
+  goPage('dash');
+
+
+// ── SKU RATIO FUNCTIONS ──────────────────────────────────────────────
+window.renderSkuRatioList = function() {
+  const el = document.getElementById('sku-ratio-list');
+  if(!el) return;
+  const keys = Object.keys(SKU_RATIOS);
+  if(!keys.length) { el.innerHTML='<div style="font-size:12px;color:var(--mut2)">Koi ratio set nahi hai</div>'; return; }
+  el.innerHTML = keys.sort().map(sku => {
+    const r = SKU_RATIOS[sku];
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bdr)">
+      <span style="font-family:var(--mono);font-size:13px;font-weight:600">${sku}</span>
+      <span style="font-size:12px;color:var(--mut2)">${r.ratio} pendants = 1 chain</span>
+      <button onclick="deleteSkuRatio('${r.id}')" style="background:none;border:none;color:var(--mut2);cursor:pointer;font-size:14px">✕</button>
+    </div>`;
+  }).join('');
+};
+
+window.addSkuRatio = async function() {
+  const sku = (document.getElementById('ratio-sku-inp').value||'').trim().toUpperCase();
+  const ratio = parseInt(document.getElementById('ratio-val-inp').value)||0;
+  if(!sku||ratio<1){showToast('SKU aur ratio daalo','terr');return;}
+  const {addDoc,collection:col,doc,setDoc} = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+  await setDoc(doc(db,'sku_ratios','ratio_'+sku.toLowerCase().replace(/[^a-z0-9]/g,'_')),{sku,ratio});
+  document.getElementById('ratio-sku-inp').value='';
+  document.getElementById('ratio-val-inp').value='';
+  showToast(sku+' ratio saved!');
+};
+
+window.deleteSkuRatio = async function(id) {
+  const {doc,deleteDoc} = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+  await deleteDoc(doc(db,'sku_ratios',id));
+  showToast('Ratio deleted');
+};
+
+// Helper: get chain qty from pendant qty
+function getChainQty(sku, pendantQty) {
+  const r = SKU_RATIOS[(sku||'').toUpperCase()];
+  if(!r||r.ratio<=1) return pendantQty;
+  return Math.floor(pendantQty/r.ratio);
+}
+
+window.saveApiKey=function(){
+  const v=document.getElementById('settings-api-key').value;
+  if(v){
+    localStorage.setItem('ornaza_api_key',v);
+    setDoc(doc(db,'settings','config'),{apiKey:v},{merge:true}).catch(()=>{});
+    showToast('✓ API Key save ho gayi','tok');
+  } else {
+    showToast('Key khali hai!','terr');
+  }
+};
+
+  // Load API key from Firebase
+  getDoc(doc(db,'settings','config')).then(d=>{
+    if(d.exists()&&d.data().apiKey){
+      const k=d.data().apiKey;
+      localStorage.setItem('ornaza_api_key',k);
+      const inp=document.getElementById('settings-api-key');
+      if(inp) inp.value=k;
+    }
+  }).catch(()=>{});
+});
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
